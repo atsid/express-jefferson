@@ -6,19 +6,6 @@
 # express-jefferson
 Declarative Express Application Wiring
 
-```
-project
-│   README.md
-│   Gulpfile.js
-└───server
-    ├───apps
-    |   └───subresourceA
-    |   |   └───index.js (exports express app)
-    |   └───subresourceB
-    |       └───index.js (exports express app)
-    │   main.js
-```
-
 ```js
 // main.js
 var express = require('express'),
