@@ -1,0 +1,6 @@
+src/
+test/
+.*
+*.es6
+Gulpfile.js
+gulp.tasks.js

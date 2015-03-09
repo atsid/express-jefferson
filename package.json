@@ -1,0 +1,43 @@
+{
+  "name": "express-jefferson",
+  "version": "1.0.0",
+  "description": "Declarative Application Routing",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atsid/express-jefferson.git"
+  },
+  "keywords": [
+    "express",
+    "node"
+  ],
+  "author": "ATS",
+  "contributors": [
+    "Nathan Evans <nathan.evans@atsid.com>",
+    "Chris Trevino <chris.trevino@atsid.com>"
+  ],
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/atsid/express-jefferson/issues"
+  },
+  "devDependencies": {
+    "babel": "^4.7.1",
+    "chai": "^2.1.1",
+    "express": "^4.12.2",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^4.0.0",
+    "gulp-changed": "^1.1.1",
+    "gulp-cli": "^0.1.5",
+    "gulp-jscs": "^1.4.0",
+    "gulp-jshint": "^1.9.2",
+    "gulp-mocha": "^2.0.0",
+    "run-sequence": "^1.0.2"
+  },
+  "homepage": "https://github.com/atsid/express-jefferson",
+  "dependencies": {
+    "debug": "^2.1.2"
+  }
+}
