@@ -6,6 +6,8 @@
 # express-jefferson
 Declarative Express Application Wiring
 
+express-jefferson is a microlibrary for declaratively describing RESTful services. Currently, it allows you to describe your service routes as a map.
+
 ```js
 // main.js
 var express = require('express'),
