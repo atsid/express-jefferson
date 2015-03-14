@@ -2,11 +2,14 @@
 [![Coverage Status](https://coveralls.io/repos/atsid/express-jefferson/badge.svg)](https://coveralls.io/r/atsid/express-jefferson)
 [![Code Climate](https://codeclimate.com/github/atsid/express-jefferson/badges/gpa.svg)](https://codeclimate.com/github/atsid/express-jefferson)
 [![Dependency Status](https://david-dm.org/atsid/express-jefferson.svg)](https://david-dm.org/atsid/express-jefferson)
+[![Code Climate](https://codeclimate.com/github/atsid/express-jefferson/badges/gpa.svg)](https://codeclimate.com/github/atsid/express-jefferson)
 
 [![NPM](https://nodei.co/npm/express-jefferson.png)](https://nodei.co/npm/express-jefferson/)
 
 # express-jefferson
 Declarative Express Application Wiring
+
+express-jefferson is a microlibrary for declaratively describing RESTful services. Currently, it allows you to describe your service routes as a map.
 
 ```js
 // main.js
