@@ -6,6 +6,9 @@ var gulp = require('gulp'),
     babel = require('gulp-babel'),
     changed = require('gulp-changed'),
     runSequence = require('run-sequence'),
+    istanbul = require('gulp-istanbul'),
+    coveralls = require('gulp-coveralls'),
+    isparta = require('isparta'),
     paths = {
         source: 'src/**/*.js',
         dest: 'lib/',
@@ -59,8 +62,22 @@ gulp.task('static-analysis', [
  * Testing Tasks
  */
 gulp.task('test', () => {
-    return gulp.src(paths.test)
-        .pipe(mocha({reporter: 'nyan'}));
+    return new Promise((resolve, reject) => {
+        gulp.src(paths.source)
+            .pipe(istanbul({
+                instrumenter: isparta.Instrumenter,
+                includeUntested: true
+            }))
+            .pipe(istanbul.hookRequire())
+            .on('finish', () => {
+                gulp.src(paths.test)
+                    .pipe(mocha({reporter: 'nyan'}))
+                    .pipe(istanbul.writeReports({
+                        reporters: ['lcov', 'text-summary']
+                    }))
+                    .on('end', resolve);
+            });
+    });
 });
 
 /**

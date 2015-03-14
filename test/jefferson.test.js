@@ -3,7 +3,7 @@
 var chai = require('chai'),
     expect = require('chai').expect,
     express = require('express'),
-    jefferson = require('../lib/jefferson');
+    jefferson = require('../src/jefferson');
 
 describe('Jefferson', () => {
 
