@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     istanbul = require('gulp-istanbul'),
     coveralls = require('gulp-coveralls'),
     isparta = require('isparta'),
+    MOCHA_REPORTER = 'nyan',
     paths = {
         source: 'src/**/*.js',
         dest: 'lib/',
@@ -57,6 +58,11 @@ gulp.task('static-analysis', [
     'lint',
     'jscs'
 ]);
+gulp.task('report-coverage', () => {
+    return gulp.src('coverage/**/lcov.info')
+        .pipe(coveralls());
+});
+
 
 /**
  * Testing Tasks
@@ -71,7 +77,7 @@ gulp.task('test', () => {
             .pipe(istanbul.hookRequire())
             .on('finish', () => {
                 gulp.src(paths.test)
-                    .pipe(mocha({reporter: 'nyan'}))
+                    .pipe(mocha({reporter: MOCHA_REPORTER}))
                     .pipe(istanbul.writeReports({
                         reporters: ['lcov', 'text-summary']
                     }))
@@ -89,5 +95,18 @@ gulp.task('build', (cb) => {
         'test',
         cb
     );
+});
+
+gulp.task('ci-config', () => {
+    MOCHA_REPORTER = 'spec';
+});
+
+gulp.task('ci-build', (cb) => {
+   runSequence(
+       'ci-config',
+       'build',
+       'report-coverage',
+       cb
+   );
 });
 gulp.task('default', ['build']);
