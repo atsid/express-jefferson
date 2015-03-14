@@ -102,11 +102,11 @@ gulp.task('ci-config', () => {
 });
 
 gulp.task('ci-build', (cb) => {
-   runSequence(
-       'ci-config',
-       'build',
-       'report-coverage',
-       cb
-   );
+    runSequence(
+        'ci-config',
+        'build',
+        'report-coverage',
+        cb
+    );
 });
 gulp.task('default', ['build']);
