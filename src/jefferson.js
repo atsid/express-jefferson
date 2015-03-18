@@ -16,7 +16,7 @@ module.exports = (app, conf) => {
     let proxies = conf.proxies;
 
     let possiblyProxy = (middleware) => {
-        if (!proxies) {
+        if (!proxies || !proxies.length) {
             return middleware;
         }
         return middleware.map((mw) => {
