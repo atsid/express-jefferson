@@ -2,7 +2,7 @@
   "name": "express-jefferson",
   "version": "1.0.0",
   "description": "Declarative Application Routing",
-  "main": "index.js",
+  "main": "jefferson.js",
   "scripts": {
     "test": "gulp ci-build"
   },
@@ -37,7 +37,8 @@
     "gulp-jshint": "^1.9.2",
     "gulp-mocha": "^2.0.0",
     "isparta": "^2.2.0",
-    "run-sequence": "^1.0.2"
+    "run-sequence": "^1.0.2",
+    "supertest": "^0.15.0"
   },
   "homepage": "https://github.com/atsid/express-jefferson",
   "dependencies": {

@@ -16,6 +16,17 @@ var express = require('express'),
     jefferson = require('express-jefferson'),
     app = express(),    
     conf = {
+        proxies: [
+            {
+                name: 'Logger',
+                init (delegate) {
+                    return (req, res, next) => {
+                        console.log("invoking middleware function");
+                        delegate(req, res, next);
+                    }
+                }
+            }
+        ],
         routes: {
             getBeerList: {
                 method: 'GET',
@@ -32,6 +43,29 @@ jefferson(app, conf);
 ...
 ```
 
+## Configuration
+* routes: (optional) - An map of routes by name. Each object in the map describes an endpoint to be wired. These endpoints must contain an HTTP method, a path, and an array of middleware functions.
+* proxies: (optional) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
+
+## Examples
+* Promise-Based Middleware Proxy
+```js
+{
+    name: 'Promise Conversion',
+    init: (delegate) => {
+        return (req, res, next) => {
+            if (delegate.length === 2) {
+                Promise.resolve(true)
+                .then(() => delegate(req, res))
+                .then(() => next())
+                .catch(next);
+            } else {
+                return delegate(req, res, next);
+            }
+        }
+    }
+}
+```
 ## Installation
 
 ```bash

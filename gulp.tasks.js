@@ -11,33 +11,30 @@ var gulp = require('gulp'),
     isparta = require('isparta'),
     MOCHA_REPORTER = 'nyan',
     paths = {
-        source: 'src/**/*.js',
-        dest: 'lib/',
-        main: 'index.js',
-        test: 'test/**/*.test.js',
+        source: ['src/**/*.js', '!src/**/*.test.js'],
+        dest: './',
+        main: 'src/index.js',
+        test: 'src/**/*.test.js',
         build: {
             main: 'Gulpfile.js',
             tasks: 'gulp.tasks.js'
         }
     },
-    STATIC_CHECK_GLOB = [
+    STATIC_CHECK_GLOB = paths.source.concat([
         paths.main,
-        paths.source,
         paths.test,
         paths.build.main,
         paths.build.tasks
-    ];
+    ]);
 
 /**
  * Transpiling Tasks
  */
 gulp.task('babel', () => {
-    let BABEL_SRC = paths.source,
-        BABEL_DEST = paths.dest;
-    return gulp.src(BABEL_SRC)
-        .pipe(changed(BABEL_DEST))
+    return gulp.src(paths.source)
+        .pipe(changed(paths.dest))
         .pipe(babel())
-        .pipe(gulp.dest(BABEL_DEST));
+        .pipe(gulp.dest(paths.dest));
 });
 
 /**
