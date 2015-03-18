@@ -13,16 +13,31 @@ module.exports = (app, conf) => {
         throw new Error("application configuration must be supplied");
     }
 
+    let proxies = conf.proxies;
+
+    let possiblyProxy = (middleware) => {
+        if (!proxies) {
+            return middleware;
+        }
+        return middleware.map((mw) => {
+            let lastProxy = proxies[proxies.length - 1].init(mw);
+            for (let i = proxies.length - 2; i >= 0; i--) {
+                lastProxy = proxies[i].init(lastProxy);
+            }
+            return lastProxy;
+        });
+    };
+
     let wireRoute = (routeName, route) => {
         let method = route.method.toLowerCase(),
             path = route.path,
-            middleware = route.middleware;
+            middleware = possiblyProxy(route.middleware);
         //jscs:disable
         debug(`routing ${routeName} - ${method} ${path} - ${middleware.length} middlewares`);
         //jscs:enable
         app[method](path, middleware);
-    },
-    wireRoutes = () => {
+    };
+    let wireRoutes = () => {
         let routeNames = Object.keys(conf.routes);
         //jscs:disable
         debug(`wiring ${routeNames.length} routes`);
