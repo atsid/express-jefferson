@@ -16,6 +16,17 @@ var express = require('express'),
     jefferson = require('express-jefferson'),
     app = express(),    
     conf = {
+        proxies: [
+            {
+                name: 'Logger',
+                init (delegate) {
+                    return (req, res, next) => {
+                        console.log("invoking middleware function");
+                        delegate(req, res, next);
+                    }
+                }
+            }
+        ],
         routes: {
             getBeerList: {
                 method: 'GET',
