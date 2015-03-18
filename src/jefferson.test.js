@@ -4,7 +4,7 @@ var chai = require('chai'),
     expect = require('chai').expect,
     express = require('express'),
     request = require('supertest'),
-    jefferson = require('../src/jefferson'),
+    jefferson = require('./jefferson'),
     debug = require('debug')('jefferson:test');
 
 describe('Jefferson', () => {
