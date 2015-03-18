@@ -49,11 +49,14 @@ describe('Jefferson', () => {
     });
 
     it('can configure handlers with proxies', (done) => {
-        let aTriggered = false, bTriggered = false, coreHandlerTriggered = false;
+        let aTriggered = 0,
+            bTriggered = 0,
+            initialMiddlewareTriggered = true,
+            endMiddlewareTriggered = false;
         let tripA = {
             init (delegate) {
                 return (req, res, next) => {
-                    aTriggered = true;
+                    aTriggered++;
                     delegate(req, res, next);
                 };
             }
@@ -61,7 +64,7 @@ describe('Jefferson', () => {
         let tripB = {
             init (delegate) {
                 return (req, res, next) => {
-                    bTriggered = true;
+                    bTriggered++;
                     delegate(req, res, next);
                 };
             }
@@ -73,8 +76,12 @@ describe('Jefferson', () => {
                     method: 'GET',
                     path: '/test-path',
                     middleware: [
+                        function (req, res, next) {
+                            initialMiddlewareTriggered = true;
+                            next();
+                        },
                         function (req, res) {
-                            coreHandlerTriggered = true;
+                            endMiddlewareTriggered = true;
                             res.send('hello!');
                         }
                     ]
@@ -94,9 +101,10 @@ describe('Jefferson', () => {
                 if (err) {
                     return done(err);
                 }
-                expect(aTriggered).to.be.true;
-                expect(bTriggered).to.be.true;
-                expect(coreHandlerTriggered).to.be.true;
+                expect(aTriggered).to.equal(2);
+                expect(bTriggered).to.equal(2);
+                expect(initialMiddlewareTriggered).to.be.true;
+                expect(endMiddlewareTriggered).to.be.true;
                 done();
             });
     });
