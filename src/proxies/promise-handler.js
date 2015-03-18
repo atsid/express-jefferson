@@ -11,13 +11,9 @@ module.exports = {
     name: 'Promise Handler',
     init: (delegate) => {
         return (req, res, next) => {
-            if (delegate.length === 2) {
-                JPromise.resolve(true)
-                    .then(() => delegate(req, res))
-                    .then(() => next())
-                    .catch(next);
-            } else {
-                delegate(req, res, next);
+            let possiblePromise = delegate(req, res, next);
+            if (possiblePromise && possiblePromise.then) {
+                possiblePromise.then(() => next()).catch(next);
             }
         };
     }
