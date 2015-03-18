@@ -12,7 +12,7 @@ var gulp = require('gulp'),
     MOCHA_REPORTER = 'nyan',
     paths = {
         source: ['src/**/*.js', '!src/**/*.test.js'],
-        dest: 'lib/',
+        dest: './',
         main: 'src/index.js',
         test: 'src/**/*.test.js',
         build: {

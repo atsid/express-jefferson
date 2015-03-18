@@ -1,4 +1,4 @@
-var proxy = require('./promise_handler'),
+var proxy = require('./promise-handler'),
     chai = require('chai'),
     expect = chai.expect;
 

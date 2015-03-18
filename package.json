@@ -2,10 +2,7 @@
   "name": "express-jefferson",
   "version": "1.0.0",
   "description": "Declarative Application Routing",
-  "main": "./lib/index.js",
-  "directories": {
-    "lib": "./lib"
-  },
+  "main": "jefferson.js",
   "scripts": {
     "test": "gulp ci-build"
   },
