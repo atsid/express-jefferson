@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     istanbul = require('gulp-istanbul'),
     coveralls = require('gulp-coveralls'),
     isparta = require('isparta'),
+    del = require('del'),
     MOCHA_REPORTER = 'nyan',
     paths = {
         source: ['src/**/*.js', '!src/**/*.test.js'],
@@ -84,6 +85,13 @@ gulp.task('test', () => {
 });
 
 /**
+ * Clean
+ */
+gulp.task('clean', () => {
+    return del(['jefferson.js', 'proxies']);
+});
+
+/**
  * Meta/Control Tasks
  */
 gulp.task('build', (cb) => {
@@ -103,6 +111,14 @@ gulp.task('ci-build', (cb) => {
         'ci-config',
         'build',
         'report-coverage',
+        cb
+    );
+});
+
+gulp.task('release', (cb) => {
+    runSequence(
+        'clean',
+        'build',
         cb
     );
 });
