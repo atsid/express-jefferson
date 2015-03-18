@@ -48,7 +48,7 @@ jefferson(app, conf);
 * proxies: (optional) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
 
 ## Examples
-* Promise-Based Middleware Conversion
+* Promise-Based Middleware Proxy
 ```js
 {
     name: 'Promise Conversion',
