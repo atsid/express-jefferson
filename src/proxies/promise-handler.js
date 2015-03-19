@@ -11,9 +11,16 @@ module.exports = {
     name: 'Promise Handler',
     init: (delegate) => {
         return (req, res, next) => {
-            let possiblePromise = delegate(req, res, next);
+            let nextTriggered = false;
+            let nextProxy = (arg) => {
+                nextTriggered = true;
+                next(arg);
+            };
+            let possiblePromise = delegate(req, res, nextProxy);
             if (possiblePromise && possiblePromise.then) {
-                possiblePromise.then(() => next()).catch(next);
+                possiblePromise.then(() => nextProxy()).catch(next);
+            } else if (!nextTriggered) {
+                next();
             }
         };
     }
