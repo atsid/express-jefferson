@@ -33,4 +33,14 @@ describe('The promise handler proxy', () => {
         let wrappedMiddleware = proxy.init(middleware);
         wrappedMiddleware({}, {}, () => done());
     });
+
+    it('can handle when a middleware returns a promise, yet invokes next on its own', (done) => {
+        let middleware = (req, res, next) => {
+            return Promise.resolve(true)
+            .then(() => req.result = 'coffee')
+            .then(() => next());
+        };
+        let wrappedMiddleware = proxy.init(middleware);
+        wrappedMiddleware({}, {}, () => done());
+    })
 });
