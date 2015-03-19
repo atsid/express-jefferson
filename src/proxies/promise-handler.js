@@ -13,15 +13,13 @@ module.exports = {
         return (req, res, next) => {
             let nextTriggered = false;
             let nextProxy = (arg) => {
-                nextTriggered = true;
-                next(arg);
+                if (!nextTriggered) {
+                    nextTriggered = true;
+                    next(arg);
+                }
             };
             let possiblePromise = delegate(req, res, nextProxy);
-            if (possiblePromise && possiblePromise.then) {
-                possiblePromise.then(() => nextProxy()).catch(next);
-            } else if (!nextTriggered) {
-                next();
-            }
+            JPromise.resolve(possiblePromise).then(() => nextProxy()).catch(next);
         };
     }
 };
