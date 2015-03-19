@@ -18,11 +18,19 @@ describe('The promise handler proxy', () => {
     });
 
     it('passes over a non promise-based middleware', (done) => {
-        var middleware = (req, res, next) => next('coffee');
+        let middleware = (req, res, next) => next('coffee');
         let wrappedMiddleware = proxy.init(middleware);
         wrappedMiddleware({}, {}, (arg) => {
             expect(arg).to.equal('coffee');
             done()
         });
+    });
+
+    it('can correctly handle a middleware function that returns values', (done) => {
+        let middleware = (req, res, next) => {
+            return true;
+        };
+        let wrappedMiddleware = proxy.init(middleware);
+        wrappedMiddleware({}, {}, () => done());
     });
 });
