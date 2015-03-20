@@ -26,7 +26,7 @@ module.exports = (app, conf) => {
 
             let lastProxy = initProxy(proxies[proxies.length - 1], mw);
             for (let i = proxies.length - 2; i >= 0; i--) {
-                lastProxy = initProxy(proxies[i], lastProxy, i);
+                lastProxy = initProxy(proxies[i], lastProxy);
             }
             return lastProxy;
         });
