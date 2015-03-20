@@ -42,5 +42,16 @@ describe('The promise handler proxy', () => {
         };
         let wrappedMiddleware = proxy.init(middleware);
         wrappedMiddleware({}, {}, () => done());
-    })
+    });
+
+    it('middlewares can halt flow of next()', () => {
+       let middleware = (req, res, next) => {
+           return Promise.resolve(true)
+           .then(() => res.complete = true);
+       };
+        let wrappedMiddleware = proxy.init(middleware, {
+            haltCondition: (req, res) => res.complete
+        });
+        return wrappedMiddleware({}, {}, () => chai.assert.fail(0,0, "did not expect next to be invoked"));
+    });
 });

@@ -9,17 +9,24 @@ var JPromise = Promise || require('bluebird');
  */
 module.exports = {
     name: 'Promise Handler',
-    init: (delegate) => {
+    init: (delegate, conf) => {
         return (req, res, next) => {
             let nextTriggered = false;
-            let nextProxy = (arg) => {
+            let invokeNext = (arg) => {
                 if (!nextTriggered) {
                     nextTriggered = true;
                     next(arg);
                 }
             };
-            let possiblePromise = delegate(req, res, nextProxy);
-            JPromise.resolve(possiblePromise).then(() => nextProxy()).catch(next);
+            let isFlowHalted = () => conf && conf.haltCondition && conf.haltCondition(req, res);
+            let possiblePromise = delegate(req, res, invokeNext);
+            return JPromise.resolve(possiblePromise)
+                .then(() => {
+                    if (!isFlowHalted()) {
+                        invokeNext();
+                    }
+                })
+                .catch(next);
         };
     }
 };
