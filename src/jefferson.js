@@ -20,9 +20,13 @@ module.exports = (app, conf) => {
             return middleware;
         }
         return middleware.map((mw) => {
-            let lastProxy = proxies[proxies.length - 1].init(mw);
+            let initProxy = (proxy, delegate) => {
+                return proxy.init(delegate, proxy.config);
+            };
+
+            let lastProxy = initProxy(proxies[proxies.length - 1], mw);
             for (let i = proxies.length - 2; i >= 0; i--) {
-                lastProxy = proxies[i].init(lastProxy);
+                lastProxy = initProxy(proxies[i], lastProxy, i);
             }
             return lastProxy;
         });
