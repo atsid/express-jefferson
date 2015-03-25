@@ -40,6 +40,19 @@ module.exports = (app, conf) => {
      * @returns {*} An array of middleware functions
      */
     let configureMiddleware = (middleware) => {
+        for (let i = middleware.length -1; i >= 0; i--) {
+            let item = middleware[i];
+            if (typeof item === 'string') {
+                if (!conf.aliases) {
+                    throw new Error(`no aliases defined, cannot find ${item}`);
+                }
+                if (!conf.aliases[item]) {
+                    throw new Error(`could not find handler chain with alias ${item}`);
+                }
+                let subchain = conf.aliases[item];
+                middleware.splice(i, 1, subchain);
+            }
+        }
         return middleware.map(wrapInProxies);
     };
 

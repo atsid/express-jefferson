@@ -8,7 +8,7 @@
 # express-jefferson
 Declarative Express Application Wiring
 
-express-jefferson is a microlibrary for declaratively describing RESTful services. Currently, it allows you to describe your service routes as a map.
+express-jefferson is a microlibrary for declaratively describing RESTful services.
 
 ```js
 // main.js
@@ -58,6 +58,7 @@ jefferson(app, conf);
 
 ## Configuration
 * routes - An map of routes by name. Each object in the map describes an endpoint to be wired. These endpoints must contain an HTTP method, a path, and an array of middleware functions.
+* aliases: (optional) - A map of alias-name to handler chain. Routes may use these aliases in lieu of repeated function groups.
 * proxies: (optional) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
 * params: (optional) - A map of path-parameter name to resolver functions. 
 
