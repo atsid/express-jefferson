@@ -27,12 +27,25 @@ var express = require('express'),
                 }
             }
         ],
+        params: {
+            beerId: (req, res, next, id) => {
+                req.beer = getBeerById();
+                next();
+            }
+        },
         routes: {
             getBeerList: {
                 method: 'GET',
                 path: '/beers',
                 middleware: [
                     beerlist.get
+                    send.json
+                ]
+            },
+            getBeer: {
+                method: 'GET',
+                path: '/beers/:beerId',
+                middleware: [
                     send.json
                 ]
             }
@@ -44,8 +57,9 @@ jefferson(app, conf);
 ```
 
 ## Configuration
-* routes: (optional) - An map of routes by name. Each object in the map describes an endpoint to be wired. These endpoints must contain an HTTP method, a path, and an array of middleware functions.
+* routes - An map of routes by name. Each object in the map describes an endpoint to be wired. These endpoints must contain an HTTP method, a path, and an array of middleware functions.
 * proxies: (optional) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
+* params: (optional) - A map of path-parameter name to resolver functions. 
 
 ## Boilerplate Proxies
 ### Promise-Based Middleware Proxy 
