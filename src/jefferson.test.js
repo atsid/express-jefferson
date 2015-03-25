@@ -23,18 +23,12 @@ describe('Jefferson', () => {
                     'getCollection': {
                         method: 'GET',
                         path: '/test-path',
-                        middleware: [
-                            function () {
-                            }
-                        ]
+                        middleware: [ () => {} ]
                     },
                     'getItem': {
                         method: 'GET',
                         path: '/test-path/:id',
-                        middleware: [
-                            function () {
-                            }
-                        ]
+                        middleware: [ () => {} ]
                     }
                 }
             },
@@ -78,11 +72,11 @@ describe('Jefferson', () => {
                     method: 'GET',
                     path: '/test-path',
                     middleware: [
-                        function (req, res, next) {
+                        (req, res, next) => {
                             initialMiddlewareTriggered = true;
                             next();
                         },
-                        function (req, res) {
+                        (req, res) => {
                             endMiddlewareTriggered = true;
                             res.send('hello!');
                         }
@@ -122,11 +116,11 @@ describe('Jefferson', () => {
                     method: 'GET',
                     path: '/test-path',
                     middleware: [
-                        function (req, res, next) {
+                        (req, res, next) => {
                             initialMiddlewareTriggered = true;
                             next();
                         },
-                        function (req, res) {
+                        (req, res) => {
                             endMiddlewareTriggered = true;
                             res.send('hello!');
                         }
@@ -171,15 +165,9 @@ describe('Jefferson', () => {
                     method: 'GET',
                     path: '/test-path',
                     middleware: [
-                        function (req, res, next) {
-                            next();
-                        },
-                        function (req, res, next) {
-                            next();
-                        },
-                        function (req, res) {
-                            res.send('hello!');
-                        }
+                        (req, res, next) => next(),
+                        (req, res, next) => next(),
+                        (req, res) => res.send('hello!')
                     ]
                 }
             }
