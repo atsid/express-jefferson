@@ -62,25 +62,20 @@ jefferson(app, conf);
 * **proxies**: (*optional*) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
 * **params**: (*optional*) - A map of path-parameter name to resolver functions. 
 
-## Boilerplate Proxies
-### Promise-Based Middleware Proxy 
+# Boilerplate Proxies
+
+## Promise-Based Middleware Proxy 
 `require('express-jefferson/proxies/promise-handler')`
 
 This proxy accepts promise-based middleware (middleware that accepts two arguments) and wraps them in a promise chain before invoking next().
 
-#### Config Options:
+### Config Options:
 * haltCondition (optional) - a predicate function that accepts the request and response. If it returns a truthy value, then the middleware chain will be halted. 
 
-### Trace Logger Middleware Proxy
+## Trace Logger Middleware Proxy
 `require('express-jefferson/proxies/trace-logger')`
 
 This proxy logs invocations of middleware using the debug library.
 
-#### Config Options:
+### Config Options:
  * logger (optional) - the name of the debug logger to use. Default is "jefferson:trace-logger"
-
-## Installation
-
-```bash
-$ npm install express-jefferson --save
-```
