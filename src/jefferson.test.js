@@ -24,14 +24,16 @@ describe('Jefferson', () => {
                         method: 'GET',
                         path: '/test-path',
                         middleware: [
-                            function () {}
+                            function () {
+                            }
                         ]
                     },
                     'getItem': {
                         method: 'GET',
                         path: '/test-path/:id',
                         middleware: [
-                            function () {}
+                            function () {
+                            }
                         ]
                     }
                 }
@@ -147,6 +149,53 @@ describe('Jefferson', () => {
                 }
                 expect(initialMiddlewareTriggered).to.be.true;
                 expect(endMiddlewareTriggered).to.be.true;
+                done();
+            });
+    });
+
+    it('invokes proxies with a middleware index', (done) => {
+        let invocations = "";
+        let conf = {
+            proxies: [
+                {
+                    init: (delegate, conf, index) => {
+                        return (req, res, next) => {
+                            invocations = invocations + index;
+                            delegate(req, res, next);
+                        };
+                    }
+                }
+            ],
+            routes: {
+                'getItem': {
+                    method: 'GET',
+                    path: '/test-path',
+                    middleware: [
+                        function (req, res, next) {
+                            next();
+                        },
+                        function (req, res, next) {
+                            next();
+                        },
+                        function (req, res) {
+                            res.send('hello!');
+                        }
+                    ]
+                }
+            }
+        };
+
+        let app = express();
+        jefferson(app, conf);
+
+        request(app)
+            .get('/test-path')
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                expect(invocations).to.equal("012");
                 done();
             });
     });

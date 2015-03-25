@@ -9,7 +9,10 @@ var JPromise = Promise || require('bluebird');
  */
 module.exports = {
     name: 'Promise Handler',
-    init: (delegate, conf) => {
+    init: (delegate, conf, middlewareIndex) => {
+        if (!delegate || typeof delegate !== "function") {
+            throw new Error("'delegate' argument must exist and be a function. MiddlewareIndex: " + middlewareIndex);
+        }
         return (req, res, next) => {
             let nextTriggered = false;
             let invokeNext = (arg) => {
