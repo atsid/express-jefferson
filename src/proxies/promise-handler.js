@@ -7,7 +7,7 @@ var JPromise = Promise || require('bluebird');
  * If it throws or resolves to an error, next() is invoked with the error.
  *
  * NOTE: This should be the innermost proxy
- * 
+ *
  * @type {{name: string, init: Function}}
  */
 module.exports = {
