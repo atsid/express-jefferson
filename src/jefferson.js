@@ -57,7 +57,7 @@ module.exports = (app, conf) => {
         let isAlias = (x) => typeof x === 'string';
         for (let i = middleware.length -1; i >= 0; i--) {
             if (isAlias(middleware[i])) {
-                middleware.splice(i, 1, resolveAlias(middleware[i]));
+                middleware.splice.apply(middleware, [i,1].concat(resolveAlias(middleware[i])));
             }
         }
     };
@@ -69,6 +69,7 @@ module.exports = (app, conf) => {
      */
     let configureMiddleware = (middleware) => {
         resolveAliases(middleware);
+        console.log("Middleware: ", middleware);
         return middleware.map(wrapInProxies);
     };
 

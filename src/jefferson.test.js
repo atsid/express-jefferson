@@ -306,4 +306,45 @@ describe('Jefferson', () => {
                 done();
             });
     });
+
+    it('can reference subchain aliases while the promise proxy is enabled', (done) => {
+        let conf = {
+            proxies: [require('../src/proxies/promise-handler')],
+            aliases: {
+                processAndReturn: [
+                    (req, res, next) => {
+                        req.entity.herp = 'derp';
+                        next();
+                    },
+                    (req, res) => { res.json(req.entity); }
+                ]
+            },
+            routes: {
+                'getUser': {
+                    method: 'GET',
+                    path: '/test-item',
+                    middleware: [
+                        (req, res, next) => {
+                            req.entity = {id: 1};
+                            next();
+                        },
+                        'processAndReturn'
+                    ]
+                }
+            }
+        };
+
+        let app = express();
+        jefferson(app, conf);
+
+        request(app)
+            .get('/test-item')
+            .expect(200)
+            .end((err, res) => {
+                if (err) { return done(err); }
+                expect(res.body.id).to.equal(1);
+                expect(res.body.herp).to.equal('derp');
+                done();
+            });
+    });
 });
