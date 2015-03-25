@@ -35,24 +35,40 @@ module.exports = (app, conf) => {
     };
 
     /**
+     * Resolves an alias reference
+     * @param aliasName
+     * @param middlewareChain
+     */
+    let resolveAlias = (aliasName) => {
+        if (!conf.aliases) {
+            throw new Error(`no aliases defined, cannot find ${aliasName}`);
+        }
+        if (!conf.aliases[aliasName]) {
+            throw new Error(`could not find handler chain with alias ${aliasName}`);
+        }
+        return conf.aliases[aliasName];
+    };
+
+    /**
+     * Resolves alias references in a middleware cahin
+     * @param middleware
+     */
+    let resolveAliases = (middleware) => {
+        let isAlias = (x) => typeof x === 'string';
+        for (let i = middleware.length -1; i >= 0; i--) {
+            if (isAlias(middleware[i])) {
+                middleware.splice(i, 1, resolveAlias(middleware[i]));
+            }
+        }
+    };
+
+    /**
      * Configures a middleware chain
      * @param middleware An array of middleware functions
      * @returns {*} An array of middleware functions
      */
     let configureMiddleware = (middleware) => {
-        for (let i = middleware.length -1; i >= 0; i--) {
-            let item = middleware[i];
-            if (typeof item === 'string') {
-                if (!conf.aliases) {
-                    throw new Error(`no aliases defined, cannot find ${item}`);
-                }
-                if (!conf.aliases[item]) {
-                    throw new Error(`could not find handler chain with alias ${item}`);
-                }
-                let subchain = conf.aliases[item];
-                middleware.splice(i, 1, subchain);
-            }
-        }
+        resolveAliases(middleware);
         return middleware.map(wrapInProxies);
     };
 
