@@ -37,21 +37,25 @@ describe('The promise handler proxy', () => {
     it('can handle when a middleware returns a promise, yet invokes next on its own', (done) => {
         let middleware = (req, res, next) => {
             return Promise.resolve(true)
-            .then(() => req.result = 'coffee')
-            .then(() => next());
+                .then(() => req.result = 'coffee')
+                .then(() => next());
         };
         let wrappedMiddleware = proxy.init(middleware);
         wrappedMiddleware({}, {}, () => done());
     });
 
     it('middlewares can halt flow of next()', () => {
-       let middleware = (req, res, next) => {
-           return Promise.resolve(true)
-           .then(() => res.complete = true);
-       };
+        let middleware = (req, res, next) => {
+            return Promise.resolve(true)
+                .then(() => res.complete = true);
+        };
         let wrappedMiddleware = proxy.init(middleware, {
             haltCondition: (req, res) => res.complete
         });
-        return wrappedMiddleware({}, {}, () => chai.assert.fail(0,0, "did not expect next to be invoked"));
+        return wrappedMiddleware({}, {}, () => chai.assert.fail(0, 0, "did not expect next to be invoked"));
+    });
+
+    it('throws an error when the delegate function is not defined', () => {
+        expect(() => proxy.init()).to.throw();
     });
 });

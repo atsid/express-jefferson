@@ -5,11 +5,17 @@ var JPromise = Promise || require('bluebird');
  * A Jefferson proxy that resolves promise-based middleware functions.
  * If a middleware function accepts 2 arguments, we will wrap it in a promise chain.
  * If it throws or resolves to an error, next() is invoked with the error.
+ *
+ * NOTE: This should be the innermost proxy
+ *
  * @type {{name: string, init: Function}}
  */
 module.exports = {
     name: 'Promise Handler',
-    init: (delegate, conf) => {
+    init: (delegate, conf, middlewareIndex) => {
+        if (!delegate || typeof delegate !== "function") {
+            throw new Error("'delegate' argument must exist and be a function. MiddlewareIndex: " + middlewareIndex);
+        }
         return (req, res, next) => {
             let nextTriggered = false;
             let invokeNext = (arg) => {

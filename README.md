@@ -52,6 +52,18 @@ jefferson(app, conf);
 `require('express-jefferson/proxies/promise-handler')`
 
 This proxy accepts promise-based middleware (middleware that accepts two arguments) and wraps them in a promise chain before invoking next().
+
+#### Config Options:
+* haltCondition (optional) - a predicate function that accepts the request and response. If it returns a truthy value, then the middleware chain will be halted. 
+
+### Trace Logger Middleware Proxy
+`require('express-jefferson/proxies/trace-logger')`
+
+This proxy logs invocations of middleware using the debug library.
+
+#### Config Options:
+ * logger (optional) - the name of the debug logger to use. Default is "jefferson:trace-logger"
+
 ## Installation
 
 ```bash

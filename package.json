@@ -27,6 +27,7 @@
     "babel": "^4.7.1",
     "chai": "^2.1.1",
     "del": "^1.1.1",
+    "esprima-fb": "^13001.1001.0-dev-harmony-fb",
     "express": "^4.12.2",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0",
