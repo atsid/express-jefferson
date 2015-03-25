@@ -8,10 +8,6 @@ var gulp = require('gulp'),
     runSequence = require('run-sequence'),
     istanbul = require('gulp-istanbul'),
     coveralls = require('gulp-coveralls'),
-    git = require('gulp-git'),
-    bump = require('gulp-bump'),
-    filter = require('gulp-filter'),
-    tag_version = require('gulp-tag-version'),
     isparta = require('isparta'),
     del = require('del'),
     MOCHA_REPORTER = 'nyan',
@@ -31,6 +27,7 @@ var gulp = require('gulp'),
         paths.build.main,
         paths.build.tasks
     ]);
+require('gulp-semver-tasks')(gulp);
 
 /**
  * Transpiling Tasks
@@ -127,18 +124,4 @@ gulp.task('release', (cb) => {
     );
 });
 
-/**
- * Release Flow
- */
-let inc = (importance) => {
-    return gulp.src(['./package.json'])
-        .pipe(bump({type: importance}))
-        .pipe(gulp.dest('./'))
-        .pipe(git.commit('bumps package version'))
-        .pipe(filter('package.json'))
-        .pipe(tag_version());
-};
-gulp.task('bump:patch', () => { return inc('patch'); });
-gulp.task('bump:minor', () => { return inc('minor'); });
-gulp.task('bump:major', () => { return inc('major'); });
 gulp.task('default', ['build']);
