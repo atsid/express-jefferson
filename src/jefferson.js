@@ -69,7 +69,6 @@ module.exports = (app, conf) => {
      */
     let configureMiddleware = (middleware) => {
         resolveAliases(middleware);
-        console.log("Middleware: ", middleware);
         return middleware.map(wrapInProxies);
     };
 
