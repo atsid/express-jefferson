@@ -5,6 +5,9 @@ var JPromise = Promise || require('bluebird');
  * A Jefferson proxy that resolves promise-based middleware functions.
  * If a middleware function accepts 2 arguments, we will wrap it in a promise chain.
  * If it throws or resolves to an error, next() is invoked with the error.
+ *
+ * NOTE: This should be the innermost proxy
+ * 
  * @type {{name: string, init: Function}}
  */
 module.exports = {
