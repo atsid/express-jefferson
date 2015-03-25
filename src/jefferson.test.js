@@ -216,7 +216,6 @@ describe('Jefferson', () => {
             .expect(200)
             .end((err, res) => {
                 if (err) { return done(err); }
-                console.log("RES", res.body);
                 expect(res.body.id).to.equal('1');
                 expect(res.body.name).to.equal('derp');
                 done();
