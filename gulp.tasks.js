@@ -7,7 +7,6 @@ var gulp = require('gulp'),
     changed = require('gulp-changed'),
     runSequence = require('run-sequence'),
     istanbul = require('gulp-istanbul'),
-    coveralls = require('gulp-coveralls'),
     isparta = require('isparta'),
     del = require('del'),
     MOCHA_REPORTER = 'nyan',
@@ -57,10 +56,6 @@ gulp.task('static-analysis', [
     'lint',
     'jscs'
 ]);
-gulp.task('report-coverage', () => {
-    return gulp.src('coverage/**/lcov.info')
-        .pipe(coveralls());
-});
 
 
 /**
@@ -111,7 +106,6 @@ gulp.task('ci-build', (cb) => {
     runSequence(
         'ci-config',
         'build',
-        'report-coverage',
         cb
     );
 });
