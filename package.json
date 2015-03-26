@@ -4,7 +4,7 @@
   "description": "Declarative Application Routing",
   "main": "jefferson.js",
   "scripts": {
-    "test": "gulp ci-build"
+    "test": "gulp ci-build && CODECLIMATE_REPO_TOKEN=b98ec66c2803bd0b0a73ca39e88baf461384d054c38a77de1376aeb107a09afe codeclimate < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "babel": "^4.7.1",
     "chai": "^2.1.1",
+    "codeclimate-test-reporter": "0.0.4",
     "del": "^1.1.1",
     "esprima-fb": "^13001.1001.0-dev-harmony-fb",
     "express": "^4.12.2",
