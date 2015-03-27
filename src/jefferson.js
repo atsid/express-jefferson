@@ -75,25 +75,43 @@ module.exports = (app, conf) => {
     let getMiddleware = (route) => {
         let result = [];
         let add = (x) => result = result.concat(x);
+        let routeMethod = route.method.toLowerCase();
         let safeMethods = {
             get: true,
             head: true,
             options: true
         };
-        let isSafe = (route) => safeMethods[route.method.toLowerCase()];
+        let isSafe = () => safeMethods[routeMethod];
 
         if (conf.pre) {
             if (conf.pre.all) {
                 add(conf.pre.all);
             }
-            if (conf.pre.safe && isSafe(route)) {
+            if (conf.pre.safe && isSafe()) {
                 add(conf.pre.safe);
             }
-            if (conf.pre.unsafe && !isSafe(route)) {
+            if (conf.pre.unsafe && !isSafe()) {
                 add(conf.pre.unsafe);
+            }
+            if (conf.pre.method && conf.pre.method[routeMethod]) {
+                add(conf.pre.method[routeMethod]);
             }
         }
         add(route.middleware);
+        if (conf.post) {
+            if (conf.post.method && conf.post.method[routeMethod]) {
+                add(conf.post.method[routeMethod]);
+            }
+            if (conf.post.unsafe && !isSafe()) {
+                add(conf.post.unsafe);
+            }
+            if (conf.post.safe && isSafe()) {
+                add(conf.post.safe);
+            }
+            if (conf.post.all) {
+                add(conf.post.all);
+            }
+        }
 
         return result;
     };
