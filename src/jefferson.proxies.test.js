@@ -1,11 +1,12 @@
-var chai = require('chai'),
-    expect = chai.expect,
-    express = require('express'),
-    request = require('supertest'),
-    jefferson = require('./jefferson');
+"use strict";
+var chai = require("chai"),
+    express = require("express"),
+    request = require("supertest"),
+    jefferson = require("./jefferson");
+let expect = chai.expect;
 
 describe("Jefferson Proxies", () => {
-    it('can configure handlers with proxies', (done) => {
+    it("can configure handlers with proxies", (done) => {
         let aTriggered = 0,
             bTriggered = 0,
             initialMiddlewareTriggered = false,
@@ -29,9 +30,9 @@ describe("Jefferson Proxies", () => {
         let conf = {
             proxies: [tripA, tripB],
             routes: {
-                'getItem': {
-                    method: 'GET',
-                    path: '/test-path',
+                "getItem": {
+                    method: "GET",
+                    path: "/test-path",
                     middleware: [
                         (req, res, next) => {
                             initialMiddlewareTriggered = true;
@@ -39,7 +40,7 @@ describe("Jefferson Proxies", () => {
                         },
                         (req, res) => {
                             endMiddlewareTriggered = true;
-                            res.send('hello!');
+                            res.send("hello!");
                         }
                     ]
                 }
@@ -50,11 +51,11 @@ describe("Jefferson Proxies", () => {
         jefferson(app, conf);
 
         request(app)
-            .get('/test-path')
-            .expect('Content-Type', /text/)
-            .expect('Content-Length', '6')
+            .get("/test-path")
+            .expect("Content-Type", /text/)
+            .expect("Content-Length", "6")
             .expect(200)
-            .end((err, res) => {
+            .end((err) => {
                 if (err) {
                     return done(err);
                 }
@@ -66,16 +67,16 @@ describe("Jefferson Proxies", () => {
             });
     });
 
-    it('handles the case when there are no proxies in the proxy array', (done) => {
+    it("handles the case when there are no proxies in the proxy array", (done) => {
         let initialMiddlewareTriggered = true,
             endMiddlewareTriggered = false;
 
         let conf = {
             proxies: [],
             routes: {
-                'getItem': {
-                    method: 'GET',
-                    path: '/test-path',
+                "getItem": {
+                    method: "GET",
+                    path: "/test-path",
                     middleware: [
                         (req, res, next) => {
                             initialMiddlewareTriggered = true;
@@ -83,7 +84,7 @@ describe("Jefferson Proxies", () => {
                         },
                         (req, res) => {
                             endMiddlewareTriggered = true;
-                            res.send('hello!');
+                            res.send("hello!");
                         }
                     ]
                 }
@@ -94,11 +95,11 @@ describe("Jefferson Proxies", () => {
         jefferson(app, conf);
 
         request(app)
-            .get('/test-path')
-            .expect('Content-Type', /text/)
-            .expect('Content-Length', '6')
+            .get("/test-path")
+            .expect("Content-Type", /text/)
+            .expect("Content-Length", "6")
             .expect(200)
-            .end((err, res) => {
+            .end((err) => {
                 if (err) {
                     return done(err);
                 }
@@ -108,7 +109,7 @@ describe("Jefferson Proxies", () => {
             });
     });
 
-    it('invokes proxies with a middleware index', (done) => {
+    it("invokes proxies with a middleware index", (done) => {
         let invocations = "";
         let conf = {
             proxies: [
@@ -122,13 +123,13 @@ describe("Jefferson Proxies", () => {
                 }
             ],
             routes: {
-                'getItem': {
-                    method: 'GET',
-                    path: '/test-path',
+                "getItem": {
+                    method: "GET",
+                    path: "/test-path",
                     middleware: [
                         (req, res, next) => next(),
                         (req, res, next) => next(),
-                        (req, res) => res.send('hello!')
+                        (req, res) => res.send("hello!")
                     ]
                 }
             }
@@ -138,9 +139,9 @@ describe("Jefferson Proxies", () => {
         jefferson(app, conf);
 
         request(app)
-            .get('/test-path')
+            .get("/test-path")
             .expect(200)
-            .end((err, res) => {
+            .end((err) => {
                 if (err) {
                     return done(err);
                 }

@@ -1,32 +1,31 @@
-'use strict';
+"use strict";
+var chai = require("chai"),
+    express = require("express"),
+    jefferson = require("./jefferson");
+let debug = require("debug")("jefferson:test");
+let expect = chai.expect;
 
-var chai = require('chai'),
-    expect = chai.expect,
-    express = require('express'),
-    jefferson = require('./jefferson'),
-    debug = require('debug')('jefferson:test');
+describe("Jefferson", () => {
 
-describe('Jefferson', () => {
-
-    it('throws an error if an express app is not provided', () => {
+    it("throws an error if an express app is not provided", () => {
         expect(() => jefferson(null, {})).to.throw();
     });
 
-    it('throws an error if an application config is not provided', () => {
+    it("throws an error if an application config is not provided", () => {
         expect(() => jefferson(express())).to.throw();
     });
 
-    it('configures an application', () => {
+    it("configures an application", () => {
         let conf = {
                 routes: {
-                    'getCollection': {
-                        method: 'GET',
-                        path: '/test-path',
+                    "getCollection": {
+                        method: "GET",
+                        path: "/test-path",
                         middleware: [ () => {} ]
                     },
-                    'getItem': {
-                        method: 'GET',
-                        path: '/test-path/:id',
+                    "getItem": {
+                        method: "GET",
+                        path: "/test-path/:id",
                         middleware: [ () => {} ]
                     }
                 }

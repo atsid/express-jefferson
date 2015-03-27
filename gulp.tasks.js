@@ -21,12 +21,14 @@ var MOCHA_REPORTER = "nyan",
             tasks: "gulp.tasks.js"
         }
     },
-    STATIC_CHECK_GLOB = paths.source.concat([
+    SRC_STATIC_CHECK_GLOB = paths.source.concat([
         paths.main,
-        paths.test,
         paths.build.main,
         paths.build.tasks
-    ]);
+    ]),
+    TEST_STATIC_CHECK_GLOB = [
+        paths.test
+    ];
 
 /**
  * Transpiling Tasks
@@ -41,12 +43,24 @@ gulp.task("babel", () => {
 /**
  * Static Analysis Tasks
  */
-gulp.task("lint", () => {
-    return gulp.src(STATIC_CHECK_GLOB)
+gulp.task("lint", ["lint-source", "lint-test"]);
+gulp.task("lint-source", () => {
+    return gulp.src(SRC_STATIC_CHECK_GLOB)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failOnError());
 });
+gulp.task("lint-test", () => {
+    return gulp.src(TEST_STATIC_CHECK_GLOB)
+        .pipe(eslint({
+            rules: {
+                "no-unused-expressions": false
+            }
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.failOnError());
+});
+
 
 /**
  * Testing Tasks

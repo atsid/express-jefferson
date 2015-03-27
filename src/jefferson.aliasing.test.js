@@ -1,26 +1,27 @@
-var chai = require('chai'),
-    expect = chai.expect,
-    express = require('express'),
-    request = require('supertest'),
-    jefferson = require('./jefferson');
+"use strict";
+var chai = require("chai"),
+    express = require("express"),
+    request = require("supertest"),
+    jefferson = require("./jefferson");
+let expect = chai.expect;
 
-describe('Jefferson Alias Configuration', () => {
+describe("Jefferson Alias Configuration", () => {
 
-    it('throws if a subchain reference is undefined', () => {
+    it("throws if a subchain reference is undefined", () => {
         let conf = {
             aliases: {
-                'derp': []
+                "derp": []
             },
             routes: {
-                'getUser': {
-                    method: 'GET',
-                    path: '/test-item',
+                "getUser": {
+                    method: "GET",
+                    path: "/test-item",
                     middleware: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
                         },
-                        'processAndReturn'
+                        "processAndReturn"
                     ]
                 }
             }
@@ -30,18 +31,18 @@ describe('Jefferson Alias Configuration', () => {
         expect(() => jefferson(app, conf)).to.throw();
     });
 
-    it('throws if a alias section is undefined and an alias is referenced', () => {
+    it("throws if a alias section is undefined and an alias is referenced", () => {
         let conf = {
             routes: {
-                'getUser': {
-                    method: 'GET',
-                    path: '/test-item',
+                "getUser": {
+                    method: "GET",
+                    path: "/test-item",
                     middleware: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
                         },
-                        'processAndReturn'
+                        "processAndReturn"
                     ]
                 }
             }
@@ -51,27 +52,27 @@ describe('Jefferson Alias Configuration', () => {
         expect(() => jefferson(app, conf)).to.throw();
     });
 
-    it('can reference subchain aliases', (done) => {
+    it("can reference subchain aliases", (done) => {
         let conf = {
             aliases: {
                 processAndReturn: [
                     (req, res, next) => {
-                        req.entity.herp = 'derp';
+                        req.entity.herp = "derp";
                         next();
                     },
                     (req, res) => { res.json(req.entity); }
                 ]
             },
             routes: {
-                'getUser': {
-                    method: 'GET',
-                    path: '/test-item',
+                "getUser": {
+                    method: "GET",
+                    path: "/test-item",
                     middleware: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
                         },
-                        'processAndReturn'
+                        "processAndReturn"
                     ]
                 }
             }
@@ -81,38 +82,38 @@ describe('Jefferson Alias Configuration', () => {
         jefferson(app, conf);
 
         request(app)
-            .get('/test-item')
+            .get("/test-item")
             .expect(200)
             .end((err, res) => {
                 if (err) { return done(err); }
                 expect(res.body.id).to.equal(1);
-                expect(res.body.herp).to.equal('derp');
+                expect(res.body.herp).to.equal("derp");
                 done();
             });
     });
 
-    it('can reference subchain aliases while the promise proxy is enabled', (done) => {
+    it("can reference subchain aliases while the promise proxy is enabled", (done) => {
         let conf = {
-            proxies: [require('../src/proxies/promise-handler')],
+            proxies: [require("../src/proxies/promise-handler")],
             aliases: {
                 processAndReturn: [
                     (req, res, next) => {
-                        req.entity.herp = 'derp';
+                        req.entity.herp = "derp";
                         next();
                     },
                     (req, res) => { res.json(req.entity); }
                 ]
             },
             routes: {
-                'getUser': {
-                    method: 'GET',
-                    path: '/test-item',
+                "getUser": {
+                    method: "GET",
+                    path: "/test-item",
                     middleware: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
                         },
-                        'processAndReturn'
+                        "processAndReturn"
                     ]
                 }
             }
@@ -122,12 +123,12 @@ describe('Jefferson Alias Configuration', () => {
         jefferson(app, conf);
 
         request(app)
-            .get('/test-item')
+            .get("/test-item")
             .expect(200)
             .end((err, res) => {
                 if (err) { return done(err); }
                 expect(res.body.id).to.equal(1);
-                expect(res.body.herp).to.equal('derp');
+                expect(res.body.herp).to.equal("derp");
                 done();
             });
     });
