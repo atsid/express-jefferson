@@ -72,15 +72,42 @@ module.exports = (app, conf) => {
         return middleware.map(wrapInProxies);
     };
 
+    let getMiddleware = (route) => {
+        let result = [];
+        let add = (x) => result = result.concat(x);
+        let safeMethods = {
+            get: true,
+            head: true,
+            options: true
+        };
+        let isSafe = (route) => safeMethods[route.method.toLowerCase()];
+
+        if (conf.pre) {
+            if (conf.pre.all) {
+                add(conf.pre.all);
+            }
+            if (conf.pre.safe && isSafe(route)) {
+                add(conf.pre.safe);
+            }
+            if (conf.pre.unsafe && !isSafe(route)) {
+                add(conf.pre.unsafe);
+            }
+        }
+        add(route.middleware);
+
+        return result;
+    };
+
     /**
      * Configures a single route in the express app/router.
      * @param routeName The name of the route
      * @param route The route configuration
      */
     let wireRoute = (routeName, route) => {
-        let method = route.method.toLowerCase(),
-            path = route.path,
-            middleware = configureMiddleware(route.middleware);
+        let method = route.method.toLowerCase();
+        let path = route.path;
+        let middleware = getMiddleware(route);
+        middleware = configureMiddleware(middleware);
         debug(`routing ${routeName} - ${method} ${path} - ${middleware.length} middlewares`);
         app[method](path, middleware);
     };

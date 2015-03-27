@@ -16,6 +16,7 @@ var MOCHA_REPORTER = "nyan",
         dest: "./",
         main: "src/index.js",
         test: "src/**/*.test.js",
+        testhelpers: "test/**/*.js",
         build: {
             main: "Gulpfile.js",
             tasks: "gulp.tasks.js"
@@ -27,7 +28,8 @@ var MOCHA_REPORTER = "nyan",
         paths.build.tasks
     ]),
     TEST_STATIC_CHECK_GLOB = [
-        paths.test
+        paths.test,
+        paths.testhelpers
     ];
 
 /**
