@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /**
  * Declaratively initializes routes in an express app
  */
-var debug = require('debug')('jefferson');
+var debug = require("debug")("jefferson");
 
 module.exports = (app, conf) => {
     if (!app) {
@@ -54,10 +54,10 @@ module.exports = (app, conf) => {
      * @param middleware
      */
     let resolveAliases = (middleware) => {
-        let isAlias = (x) => typeof x === 'string';
-        for (let i = middleware.length -1; i >= 0; i--) {
+        let isAlias = (x) => typeof x === "string";
+        for (let i = middleware.length - 1; i >= 0; i--) {
             if (isAlias(middleware[i])) {
-                middleware.splice.apply(middleware, [i,1].concat(resolveAlias(middleware[i])));
+                middleware.splice.apply(middleware, [i, 1].concat(resolveAlias(middleware[i])));
             }
         }
     };

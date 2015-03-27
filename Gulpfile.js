@@ -1,2 +1,2 @@
-require('babel/register');
-require('./gulp.tasks');
+require("babel/register");
+require("./gulp.tasks");

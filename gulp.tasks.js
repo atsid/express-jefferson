@@ -1,23 +1,24 @@
-'use strict';
-var gulp = require('gulp'),
-    jshint = require('gulp-jshint'),
-    jscs = require('gulp-jscs'),
-    mocha = require('gulp-mocha'),
-    babel = require('gulp-babel'),
-    changed = require('gulp-changed'),
-    runSequence = require('run-sequence'),
-    istanbul = require('gulp-istanbul'),
-    isparta = require('isparta'),
-    del = require('del'),
-    MOCHA_REPORTER = 'nyan',
+"use strict";
+var gulp = require("gulp"),
+    mocha = require("gulp-mocha"),
+    babel = require("gulp-babel"),
+    changed = require("gulp-changed"),
+    runSequence = require("run-sequence"),
+    istanbul = require("gulp-istanbul"),
+    eslint = require("gulp-eslint"),
+    isparta = require("isparta"),
+    del = require("del");
+require("gulp-semver-tasks")(gulp);
+
+var MOCHA_REPORTER = "nyan",
     paths = {
-        source: ['src/**/*.js', '!src/**/*.test.js'],
-        dest: './',
-        main: 'src/index.js',
-        test: 'src/**/*.test.js',
+        source: ["src/**/*.js", "!src/**/*.test.js"],
+        dest: "./",
+        main: "src/index.js",
+        test: "src/**/*.test.js",
         build: {
-            main: 'Gulpfile.js',
-            tasks: 'gulp.tasks.js'
+            main: "Gulpfile.js",
+            tasks: "gulp.tasks.js"
         }
     },
     STATIC_CHECK_GLOB = paths.source.concat([
@@ -26,12 +27,11 @@ var gulp = require('gulp'),
         paths.build.main,
         paths.build.tasks
     ]);
-require('gulp-semver-tasks')(gulp);
 
 /**
  * Transpiling Tasks
  */
-gulp.task('babel', () => {
+gulp.task("babel", () => {
     return gulp.src(paths.source)
         .pipe(changed(paths.dest))
         .pipe(babel())
@@ -41,27 +41,17 @@ gulp.task('babel', () => {
 /**
  * Static Analysis Tasks
  */
-gulp.task('lint', () => {
+gulp.task("lint", () => {
     return gulp.src(STATIC_CHECK_GLOB)
-        .pipe(jshint({lookup: true}))
-        .pipe(jshint.reporter('default'));
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failOnError());
 });
-gulp.task('jscs', () => {
-    return gulp.src(STATIC_CHECK_GLOB)
-        .pipe(jscs({
-            configPath: '.jscrc'
-        }));
-});
-gulp.task('static-analysis', [
-    'lint',
-    'jscs'
-]);
-
 
 /**
  * Testing Tasks
  */
-gulp.task('test', () => {
+gulp.task("test", () => {
     return new Promise((resolve, reject) => {
         gulp.src(paths.source)
             .pipe(istanbul({
@@ -69,53 +59,54 @@ gulp.task('test', () => {
                 includeUntested: true
             }))
             .pipe(istanbul.hookRequire())
-            .on('finish', () => {
+            .on("finish", () => {
                 gulp.src(paths.test)
                     .pipe(mocha({reporter: MOCHA_REPORTER}))
                     .pipe(istanbul.writeReports({
-                        reporters: ['lcov', 'text-summary']
+                        reporters: ["lcov", "text-summary"]
                     }))
-                    .on('end', resolve);
-            });
+                    .on("end", resolve);
+            })
+            .on("error", (err) => { reject(err); });
     });
 });
 
 /**
  * Clean
  */
-gulp.task('clean', () => {
-    return del(['jefferson.js', 'proxies']);
+gulp.task("clean", () => {
+    return del(["jefferson.js", "proxies"]);
 });
 
 /**
  * Meta/Control Tasks
  */
-gulp.task('build', (cb) => {
+gulp.task("build", (cb) => {
     runSequence(
-        ['static-analysis', 'babel'],
-        'test',
+        ["lint", "babel"],
+        "test",
         cb
     );
 });
 
-gulp.task('ci-config', () => {
-    MOCHA_REPORTER = 'spec';
+gulp.task("ci-config", () => {
+    MOCHA_REPORTER = "spec";
 });
 
-gulp.task('ci-build', (cb) => {
+gulp.task("ci-build", (cb) => {
     runSequence(
-        'ci-config',
-        'build',
+        "ci-config",
+        "build",
         cb
     );
 });
 
-gulp.task('release', (cb) => {
+gulp.task("release", (cb) => {
     runSequence(
-        'clean',
-        'build',
+        "clean",
+        "build",
         cb
     );
 });
 
-gulp.task('default', ['build']);
+gulp.task("default", ["build"]);

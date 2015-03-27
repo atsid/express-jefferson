@@ -1,5 +1,5 @@
-'use strict';
-var JPromise = Promise || require('bluebird');
+"use strict";
+var JPromise = Promise || require("bluebird");
 
 /**
  * A Jefferson proxy that resolves promise-based middleware functions.
@@ -11,7 +11,7 @@ var JPromise = Promise || require('bluebird');
  * @type {{name: string, init: Function}}
  */
 module.exports = {
-    name: 'Promise Handler',
+    name: "Promise Handler",
     init: (delegate, conf, middlewareIndex) => {
         if (!delegate || typeof delegate !== "function") {
             throw new Error("'delegate' argument must exist and be a function. MiddlewareIndex: " + middlewareIndex);

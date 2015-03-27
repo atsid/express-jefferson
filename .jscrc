@@ -1,5 +1,0 @@
-{
-    "esnext": true,
-    "esprima": "./node_modules/esprima-fb",
-    "fileExtensions": [".js"]
-}
