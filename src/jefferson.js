@@ -3,8 +3,12 @@
 /**
  * Declaratively initializes routes in an express app
  */
-var debug = require("debug")("jefferson");
 var Configuration = require("./domain/configuration");
+var debug = require("debug")("jefferson");
+let AppSectionClasses = [
+    require("./domain/appsection/resolvers"),
+    require("./domain/appsection/routes")
+];
 
 module.exports = (app, conf) => {
     if (!app) {
@@ -14,119 +18,8 @@ module.exports = (app, conf) => {
         throw new Error("application configuration must be supplied");
     }
     conf = new Configuration(conf);
-
-    /**
-     * Wraps a single middleware function with the proxy chain
-     * @param delegate The middleware function we are proxying
-     * @param index The index of the middleware function in the chain
-     * @returns {*} A proxied function to use in express
-     */
-    let wrapInProxies = (delegate, index) => {
-        let proxies = conf.proxies;
-        if (!proxies.length) {
-            return delegate;
-        }
-        let initProxy = (proxy, delegate) => {
-            return proxy.init(delegate, proxy.config, index);
-        };
-        let lastProxy = initProxy(proxies[proxies.length - 1], delegate);
-        for (let i = proxies.length - 2; i >= 0; i--) {
-            lastProxy = initProxy(proxies[i], lastProxy);
-        }
-        return lastProxy;
-    };
-
-    /**
-     * Resolves alias references in a middleware cahin
-     * @param middleware
-     */
-    let resolveAliases = (middleware) => {
-        let isAlias = (x) => typeof x === "string";
-        for (let i = middleware.length - 1; i >= 0; i--) {
-            if (isAlias(middleware[i])) {
-                middleware.splice.apply(middleware, [i, 1].concat(conf.getAlias(middleware[i])));
-            }
-        }
-    };
-
-    /**
-     * Configures a middleware chain
-     * @param middleware An array of middleware functions
-     * @returns {*} An array of middleware functions
-     */
-    let configureMiddleware = (middleware) => {
-        resolveAliases(middleware);
-        return middleware.map(wrapInProxies);
-    };
-
-    let getMiddleware = (route) => {
-        let result = [];
-        let add = (x) => result = result.concat(x);
-        let routeMethod = route.method.toLowerCase();
-        let safeMethods = {
-            get: true,
-            head: true,
-            options: true
-        };
-        let isSafe = () => safeMethods[routeMethod];
-
-        add(conf.pre.all);
-        add(isSafe() ? conf.pre.safe : conf.pre.unsafe);
-        if (conf.pre.method[routeMethod]) {
-            add(conf.pre.method[routeMethod]);
-        }
-
-        add(route.middleware);
-        if (conf.post.method[routeMethod]) {
-            add(conf.post.method[routeMethod]);
-        }
-        add(isSafe() ? conf.post.safe : conf.post.unsafe);
-        add(conf.post.all);
-
-        return result;
-    };
-
-    /**
-     * Configures a single route in the express app/router.
-     * @param routeName The name of the route
-     * @param route The route configuration
-     */
-    let wireRoute = (routeName, route) => {
-        let method = route.method.toLowerCase();
-        let path = route.path;
-        let middleware = getMiddleware(route);
-        middleware = configureMiddleware(middleware);
-        debug(`routing ${routeName} - ${method} ${path} - ${middleware.length} middlewares`);
-        app[method](path, middleware);
-    };
-
-    /**
-     * Configures all routes within the express app.
-     */
-    let wireRoutes = () => {
-        let routeNames = Object.keys(conf.routes);
-        debug(`wiring ${routeNames.length} routes`);
-        routeNames.forEach((routeName) => wireRoute(routeName, conf.routes[routeName]));
-    };
-
-    /**
-     * Configures the application with a parameter resolver
-     * @param name The parameter name
-     */
-    let wireResolver = (name) => {
-        debug(`wiring parameter resolver for ${name}`);
-        app.param(name, conf.params[name]);
-    };
-
-    /**
-     * Configures parameter resolvers for the application
-     */
-    let wireResolvers = () => {
-        let resolvers = Object.keys(conf.params);
-        debug(`wiring ${resolvers.length} parameter resolvers`);
-        resolvers.forEach(wireResolver);
-    };
-
-    wireRoutes();
-    wireResolvers();
+    AppSectionClasses.map((Type) => {
+        debug(`configuring ${Type.name}`);
+        new Type(app, conf).configure();
+    });
 };
