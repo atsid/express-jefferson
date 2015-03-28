@@ -61,8 +61,16 @@ jefferson(app, conf);
 * **aliases**: (*optional*) - A map of alias-name to handler chain. Routes may use these aliases in lieu of repeated function groups.
 * **proxies**: (*optional*) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
 * **params**: (*optional*) - A map of path-parameter name to resolver functions. 
+* **pre**: (*optional*) - (object) Boilerplate section of pre-middleware functions
+* **post**: (*optional*) - (object) Boilerplate section of post-middleware functions
 
-# Boilerplate Proxies
+Boilerplate Config Sections (pre/post):
+* **all**: (*optional*) - An array of middleware to be applied to all endpoints.
+* **safe**: (*optional*) - An array of middleware to be applied to all safe endpoints (GET, HEAD, OPTIONS).
+* **unsafe**: (*optional*) - An array of middleware to be applied to all unsafe endpoints (not GET, HEAD, OPTIONS).
+* **method**: (*optional*, object) - On object of method-name to handler list.
+
+# Proxies provided in Jefferson
 
 ## Promise-Based Middleware Proxy 
 `require('express-jefferson/proxies/promise-handler')`
