@@ -4,6 +4,7 @@
  * Declaratively initializes routes in an express app
  */
 var debug = require("debug")("jefferson");
+var Configuration = require("./domain/configuration");
 
 module.exports = (app, conf) => {
     if (!app) {
@@ -12,7 +13,7 @@ module.exports = (app, conf) => {
     if (!conf) {
         throw new Error("application configuration must be supplied");
     }
-    let proxies = conf.proxies;
+    conf = new Configuration(conf);
 
     /**
      * Wraps a single middleware function with the proxy chain
@@ -21,7 +22,8 @@ module.exports = (app, conf) => {
      * @returns {*} A proxied function to use in express
      */
     let wrapInProxies = (delegate, index) => {
-        if (!proxies || !proxies.length) {
+        let proxies = conf.proxies;
+        if (!proxies.length) {
             return delegate;
         }
         let initProxy = (proxy, delegate) => {
@@ -35,21 +37,6 @@ module.exports = (app, conf) => {
     };
 
     /**
-     * Resolves an alias reference
-     * @param aliasName
-     * @param middlewareChain
-     */
-    let resolveAlias = (aliasName) => {
-        if (!conf.aliases) {
-            throw new Error(`no aliases defined, cannot find ${aliasName}`);
-        }
-        if (!conf.aliases[aliasName]) {
-            throw new Error(`could not find handler chain with alias ${aliasName}`);
-        }
-        return conf.aliases[aliasName];
-    };
-
-    /**
      * Resolves alias references in a middleware cahin
      * @param middleware
      */
@@ -57,7 +44,7 @@ module.exports = (app, conf) => {
         let isAlias = (x) => typeof x === "string";
         for (let i = middleware.length - 1; i >= 0; i--) {
             if (isAlias(middleware[i])) {
-                middleware.splice.apply(middleware, [i, 1].concat(resolveAlias(middleware[i])));
+                middleware.splice.apply(middleware, [i, 1].concat(conf.getAlias(middleware[i])));
             }
         }
     };
@@ -83,35 +70,18 @@ module.exports = (app, conf) => {
         };
         let isSafe = () => safeMethods[routeMethod];
 
-        if (conf.pre) {
-            if (conf.pre.all) {
-                add(conf.pre.all);
-            }
-            if (conf.pre.safe && isSafe()) {
-                add(conf.pre.safe);
-            }
-            if (conf.pre.unsafe && !isSafe()) {
-                add(conf.pre.unsafe);
-            }
-            if (conf.pre.method && conf.pre.method[routeMethod]) {
-                add(conf.pre.method[routeMethod]);
-            }
+        add(conf.pre.all);
+        add(isSafe() ? conf.pre.safe : conf.pre.unsafe);
+        if (conf.pre.method[routeMethod]) {
+            add(conf.pre.method[routeMethod]);
         }
+
         add(route.middleware);
-        if (conf.post) {
-            if (conf.post.method && conf.post.method[routeMethod]) {
-                add(conf.post.method[routeMethod]);
-            }
-            if (conf.post.unsafe && !isSafe()) {
-                add(conf.post.unsafe);
-            }
-            if (conf.post.safe && isSafe()) {
-                add(conf.post.safe);
-            }
-            if (conf.post.all) {
-                add(conf.post.all);
-            }
+        if (conf.post.method[routeMethod]) {
+            add(conf.post.method[routeMethod]);
         }
+        add(isSafe() ? conf.post.safe : conf.post.unsafe);
+        add(conf.post.all);
 
         return result;
     };
@@ -152,11 +122,9 @@ module.exports = (app, conf) => {
      * Configures parameter resolvers for the application
      */
     let wireResolvers = () => {
-        if (conf.params) {
-            let resolvers = Object.keys(conf.params);
-            debug(`wiring ${resolvers.length} parameter resolvers`);
-            resolvers.forEach(wireResolver);
-        }
+        let resolvers = Object.keys(conf.params);
+        debug(`wiring ${resolvers.length} parameter resolvers`);
+        resolvers.forEach(wireResolver);
     };
 
     wireRoutes();
