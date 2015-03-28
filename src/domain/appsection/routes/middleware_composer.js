@@ -12,7 +12,6 @@ let safeMethods = {
 /**
  * Composes a middleware chain by taking a core chain and adding boilerplate pre and post sections
  * to it
- * @type {{}}
  */
 module.exports = {
     compose (route, conf) {

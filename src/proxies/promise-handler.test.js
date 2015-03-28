@@ -57,4 +57,40 @@ describe("The promise handler proxy", () => {
     it("throws an error when the delegate function is not defined", () => {
         expect(() => proxy.init()).to.throw();
     });
+
+    it("can promisify an async handler", function (done) {
+        this.timeout(5000);
+        let delegate = (req, res, next) => {
+            setTimeout(() => {
+                req.result = "Hello";
+                next();
+            }, 250);
+        };
+        let promisified = proxy.promisify(delegate);
+        let req = {};
+        let nextCalled = false;
+        let next = () => nextCalled = true;
+        promisified(req, {}, next)
+        .then(() => {
+            expect(nextCalled).to.be.true;
+            expect(req.result).to.equal("Hello");
+            done();
+        });
+    });
+
+    it("can handle caught errors from an async handler", function (done) {
+        this.timeout(5000);
+        let delegate = (req, res, next) => {
+            setTimeout(() => {
+                next(new Error("DERP"));
+            }, 250);
+        };
+        let promisified = proxy.promisify(delegate);
+        promisified({}, {}, () => {})
+        .then(() => { throw new Error("Did not expect promise to resolve"); })
+        .catch((err) => {
+            expect(err).to.be.ok;
+            done();
+        });
+    });
 });

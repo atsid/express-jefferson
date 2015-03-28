@@ -14,7 +14,7 @@ class Routes {
 
     configure () {
         let routeNames = Object.keys(this.conf.routes);
-        debug(`wiring ${routeNames.length} routes`);
+        debug(`detected ${routeNames.length} routes`);
         routeNames.forEach((routeName) => {
             let route = this.conf.routes[routeName];
             this.wireRoute(routeName, route);
@@ -31,7 +31,7 @@ class Routes {
         let path = route.path;
         let middleware = middlewareComposer.compose(route, this.conf);
         middleware = chainProcessor.process(middleware, this.conf);
-        debug(`routing ${routeName} - ${method} ${path} - ${middleware.length} middlewares`);
+        debug(`"${routeName}": ${method.toUpperCase()} ${path} - ${middleware.length} middlewares`);
         this.app[method](path, middleware);
     }
 }

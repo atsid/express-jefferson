@@ -34,5 +34,25 @@ module.exports = {
                 })
                 .catch(next);
         };
+    },
+
+    /**
+     * Promisifies an async middleware function.
+     * @param delegate
+     */
+    promisify: (delegate) => {
+        return (req, res, next) => {
+            return new JPromise((resolve, reject) => {
+                let proxyNext = (err) => {
+                    next(err);
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                };
+                delegate(req, res, proxyNext);
+            });
+        };
     }
 };

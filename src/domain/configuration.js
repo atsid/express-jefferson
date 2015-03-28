@@ -14,6 +14,9 @@ let boilerplateSection = (section) => {
     return result;
 };
 
+/**
+ * The configuration class provides sane defaults for incoming configuration values.
+ */
 class Configuration {
     constructor(conf) {
         this.routes = conf.routes || {};

@@ -8,15 +8,17 @@ module.exports = {
     process (middleware, conf) {
         let isAlias = (x) => typeof x === "string";
         let getAlias = (aliasName) => {
-            if (!conf.aliases[aliasName]) {
+            let found = conf.aliases[aliasName];
+            if (!found) {
                 throw new Error(`could not find alias ${aliasName}`);
             }
-            return conf.aliases[aliasName];
+            return found;
         };
 
         for (let i = middleware.length - 1; i >= 0; i--) {
             if (isAlias(middleware[i])) {
-                middleware.splice.apply(middleware, [i, 1].concat(getAlias(middleware[i])));
+                let aliasResult = getAlias(middleware[i]);
+                middleware.splice.apply(middleware, [i, 1].concat(aliasResult));
             }
         }
         return middleware;
