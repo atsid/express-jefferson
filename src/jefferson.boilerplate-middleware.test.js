@@ -133,7 +133,7 @@ describe("Jefferson Pre/Post-Middleware", () => {
         return checkRequest(request(app).get("/test"), "01XY");
     });
 
-    it("can describe middleware that's invoked after mutable and immutable chains", () => {
+    it("can describe middleware that's invoked after safe and unsafe chains", () => {
         let conf = {
             post: {
                 all: [middleware.sendResult],
