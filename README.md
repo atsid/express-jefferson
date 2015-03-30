@@ -97,11 +97,11 @@ enable: ['trust proxy', 'etag']
 ```js
 disable: ['trust proxy', 'etag']
 ```
-* **engines**: (*optional*) - An array of objects describing templating engines to use in the app. `{ ext: <string>, callback: <function> }`
+* **engines**: (*optional*) - An map of template rendering engines.
 ```js
-engines: [{
-    ext: 'jade': callback: require('jade').__express
-}]
+engines: {
+    'jade': require('jade').__express
+}
 ```
 * **locals**: (*optional*) - (object) An object that will populate app.locals (http://expressjs.com/api.html#app.locals)
 ```js
