@@ -91,7 +91,7 @@ gulp.task("test", () => {
  * Clean
  */
 gulp.task("clean", () => {
-    return del(["jefferson.js", "proxies"]);
+    return del(["jefferson.js", "proxies", "domain"]);
 });
 
 /**
