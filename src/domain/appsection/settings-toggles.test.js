@@ -2,7 +2,7 @@
 
 let chai = require("chai");
 let expect = chai.expect;
-let EngineConfig = require("./settings-toggles");
+let ToggleConfig = require("./settings-toggles");
 
 describe("The settings-toggle configuration section", () => {
     it("can enable app features", () => {
@@ -13,10 +13,11 @@ describe("The settings-toggle configuration section", () => {
             }
         };
         let conf = {
-            enable: ["derp"]
+            enable: ["derp"],
+            disable: []
         };
 
-        new EngineConfig(app, conf).configure();
+        new ToggleConfig(app, conf).configure();
         expect(enabled.derp).to.be.true;
     });
 
@@ -28,10 +29,11 @@ describe("The settings-toggle configuration section", () => {
             }
         };
         let conf = {
-            disable: ["derp"]
+            disable: ["derp"],
+            enable: []
         };
 
-        new EngineConfig(app, conf).configure();
+        new ToggleConfig(app, conf).configure();
         expect(disabled.derp).to.be.true;
     });
 });
