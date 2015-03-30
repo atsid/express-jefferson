@@ -10,10 +10,6 @@ Declarative Express Application Wiring
 
 express-jefferson is a library for declaratively describing RESTful services and configuring express apps.
 
-#![TJ Badass](http://th01.deviantart.net/fs71/PRE/i/2011/129/3/1/thomas_jefferson_vs_gorilla_by_sharpwriter-d3fxuo8.jpg)
-
-
-
 ```js
 // main.js
 var express = require('express'),
