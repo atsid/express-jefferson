@@ -1,6 +1,6 @@
 {
   "name": "express-jefferson",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Declarative Application Routing",
   "main": "jefferson.js",
   "scripts": {
