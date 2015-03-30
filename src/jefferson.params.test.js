@@ -16,10 +16,8 @@ describe("Jefferson Parameter Resolution", () => {
                 }
             },
             routes: {
-                "getUser": {
-                    method: "GET",
-                    path: "/users/:userId",
-                    middleware: [
+                "/users/:userId": {
+                    "get": [
                         (req, res) => { res.json(req.user); }
                     ]
                 }

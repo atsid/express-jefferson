@@ -2,7 +2,6 @@
 var chai = require("chai"),
     express = require("express"),
     jefferson = require("./jefferson");
-let debug = require("debug")("jefferson:test");
 let expect = chai.expect;
 
 describe("Jefferson", () => {
@@ -18,6 +17,32 @@ describe("Jefferson", () => {
     it("configures an application", () => {
         let conf = {
                 routes: {
+                    "/test-path": {
+                        get: [() => {}]
+                    },
+                    "/test-path/:id": {
+                        get: [() => {}],
+                        post: [() => {}],
+                        put: [() => {}]
+                    }
+                }
+            },
+            app = express();
+
+        jefferson(app, conf);
+        /*eslint-disable*/
+        let appRoutes = app._router.stack.filter((it) => it.route);
+        /*eslint-enable*/
+        expect(appRoutes.length).to.equal(2);
+        expect(appRoutes[0].route.methods.get).to.be.true;
+        expect(appRoutes[1].route.methods.get).to.be.true;
+        expect(appRoutes[1].route.methods.post).to.be.true;
+        expect(appRoutes[1].route.methods.put).to.be.true;
+    });
+
+    it("will throw with an older configuration", () => {
+        let conf = {
+                routes: {
                     "getCollection": {
                         method: "GET",
                         path: "/test-path",
@@ -30,15 +55,8 @@ describe("Jefferson", () => {
                     }
                 }
             },
-            routed = 0,
-            app = {
-                get: (path, middleware) => {
-                    routed++;
-                    debug("mock application routing", path, middleware);
-                }
-            };
+            app = express();
 
-        jefferson(app, conf);
-        expect(routed).to.equal(2);
+        expect(() => jefferson(app, conf)).to.throw();
     });
 });

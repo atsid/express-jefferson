@@ -34,26 +34,16 @@ var express = require('express'),
             }
         },
         routes: {
-            getBeerList: {
-                method: 'GET',
-                path: '/beers',
-                middleware: [
-                    beerlist.get
-                    send.json
-                ]
+            '/beers': {
+                get: [beerlist.get, send.json]
             },
-            getBeer: {
-                method: 'GET',
-                path: '/beers/:beerId',
-                middleware: [
-                    send.json
-                ]
+            '/beers/:beerId': 
+                get: [beer.get, send.json]
             }
         }
     };
     
 jefferson(app, conf);
-...
 ```
 
 ## Configuration

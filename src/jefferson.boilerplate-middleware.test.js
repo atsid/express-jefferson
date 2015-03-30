@@ -28,10 +28,8 @@ describe("Jefferson Pre/Post-Middleware", () => {
                 ]
             },
             routes: {
-                "getItem": {
-                    method: "GET",
-                    path: "/test",
-                    middleware: [
+                "/test": {
+                    get: [
                         middleware.append(2),
                         middleware.append(3),
                         middleware.sendResult
@@ -44,7 +42,7 @@ describe("Jefferson Pre/Post-Middleware", () => {
         return checkRequest(request(app).get("/test"), "0123");
     });
 
-    it("can describe middleware that's invoked before mutable and immutable chains", () => {
+    it("can describe middleware that's invoked before safe and unsafe chains", () => {
         let conf = {
             post: {
                 all: [middleware.sendResult]
@@ -62,35 +60,13 @@ describe("Jefferson Pre/Post-Middleware", () => {
                 }
             },
             routes: {
-                "get": {
-                    method: "GET",
-                    path: "/test",
-                    middleware: [middleware.append("GET")]
-                },
-                "head": {
-                    method: "HEAD",
-                    path: "/test",
-                    middleware: [middleware.append("HEAD")]
-                },
-                "options": {
-                    method: "OPTIONS",
-                    path: "/test",
-                    middleware: [middleware.append("OPTIONS")]
-                },
-                "edit": {
-                    method: "PUT",
-                    path: "/test",
-                    middleware: [middleware.append("PUT")]
-                },
-                "create": {
-                    method: "POST",
-                    path: "/test",
-                    middleware: [middleware.append("POST")]
-                },
-                "delete": {
-                    method: "DELETE",
-                    path: "/test",
-                    middleware: [middleware.append("DELETE")]
+                "/test": {
+                    "get": [middleware.append("GET")],
+                    "head": [middleware.append("HEAD")],
+                    "options": [middleware.append("OPTIONS")],
+                    "put": [middleware.append("PUT")],
+                    "post": [middleware.append("POST")],
+                    "delete": [middleware.append("DELETE")]
                 }
             }
         };
@@ -117,10 +93,8 @@ describe("Jefferson Pre/Post-Middleware", () => {
                 ]
             },
             routes: {
-                "getItem": {
-                    method: "GET",
-                    path: "/test",
-                    middleware: [
+                "/test": {
+                    "get": [
                         middleware.append("0"),
                         middleware.append("1")
                     ]
@@ -148,35 +122,13 @@ describe("Jefferson Pre/Post-Middleware", () => {
                 }
             },
             routes: {
-                "get": {
-                    method: "GET",
-                    path: "/test",
-                    middleware: [middleware.append("GET")]
-                },
-                "head": {
-                    method: "HEAD",
-                    path: "/test",
-                    middleware: [middleware.append("HEAD")]
-                },
-                "options": {
-                    method: "OPTIONS",
-                    path: "/test",
-                    middleware: [middleware.append("OPTIONS")]
-                },
-                "edit": {
-                    method: "PUT",
-                    path: "/test",
-                    middleware: [middleware.append("PUT")]
-                },
-                "create": {
-                    method: "POST",
-                    path: "/test",
-                    middleware: [middleware.append("POST")]
-                },
-                "delete": {
-                    method: "DELETE",
-                    path: "/test",
-                    middleware: [middleware.append("DELETE")]
+                "/test": {
+                    "get": [middleware.append("GET")],
+                    "head": [middleware.append("HEAD")],
+                    "options": [middleware.append("OPTIONS")],
+                    "put": [middleware.append("PUT")],
+                    "post": [middleware.append("POST")],
+                    "delete": [middleware.append("DELETE")]
                 }
             }
         };
