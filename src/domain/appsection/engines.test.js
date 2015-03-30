@@ -13,12 +13,9 @@ describe("The 'engines' configuration section", () => {
             }
         };
         let conf = {
-            engines: [
-                {
-                    ext: "jade",
-                    callback: () => "derp"
-                }
-            ]
+            engines: {
+                "jade": () => "derp"
+            }
         };
 
         new EngineConfig(app, conf).configure();

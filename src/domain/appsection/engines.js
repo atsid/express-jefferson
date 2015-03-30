@@ -11,9 +11,9 @@ class Engines {
     }
 
     configure() {
-        this.conf.engines.forEach((it) => {
-            debug(`configuring engine ${it.ext}`);
-            this.app.engine(it.ext, it.callback);
+        Object.keys(this.conf.engines).forEach((ext) => {
+            debug(`configuring engine ${ext}`);
+            this.app.engine(ext, this.conf.engines[ext]);
         });
     }
 }
