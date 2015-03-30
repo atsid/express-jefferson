@@ -8,7 +8,7 @@
 # express-jefferson
 Declarative Express Application Wiring
 
-express-jefferson is a library for declaratively describing RESTful services.
+express-jefferson is a library for declaratively describing RESTful services and configuring express apps.
 
 ```js
 // main.js
