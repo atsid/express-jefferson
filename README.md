@@ -89,27 +89,32 @@ routes: {
     }
 }
 ```
-* **enable**: (*optional*) - An array of settings to enable (http://expressjs.com/api.html#app.enable)
+* **enable**: (*optional*) - An array of settings strings to enable (http://expressjs.com/api.html#app.enable)
 ```js
 enable: ['trust proxy', 'etag']
 ```
-* **disable**: (*optional*) - An array of settings to disable (http://expressjs.com/api.html#app.disable)
+* **disable**: (*optional*) - An array of settings strings to disable (http://expressjs.com/api.html#app.disable)
 ```js
 disable: ['trust proxy', 'etag']
 ```
-* **engines**: (*optional*) - An map of template rendering engines.
+* **engines**: (*optional*) - An map of template rendering engines. `{ <extension>: <engineFunction> }`
 ```js
 engines: {
     'jade': require('jade').__express
 }
 ```
-* **locals**: (*optional*) - (object) An object that will populate app.locals (http://expressjs.com/api.html#app.locals)
+* **locals**: (*optional*) - (object) An object that will populate app.locals (http://expressjs.com/api.html#app.locals) `{ <localName>: <localValue> }`
 ```js
 locals: {
     'a': true
 }
 ```
 * **settings**: (*optional*) - (object) An object that will be iterated to populate application settings using app.set (http://expressjs.com/api.html#app.set) `{ <settingName>: <settingValue> }`
+```js
+settings: {
+    'a': true
+}
+```
 
 Boilerplate Config Sections (pre/post):
 * **all**: (*optional*) - An array of middleware to be applied to all endpoints.
