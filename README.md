@@ -63,6 +63,8 @@ jefferson(app, conf);
 * **post**: (*optional*) - (object) Boilerplate section of post-middleware functions
 * **proxies**: (*optional*) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
 * **params**: (*optional*) - A map of path-parameter name to resolver functions.
+* **enable**: (*optional*) - An array of settings to enable (http://expressjs.com/api.html#app.enable)
+* **disable**: (*optional*) - An array of settings to disable (http://expressjs.com/api.html#app.disable)
 * **engines**: (*optional*) - An array of objects describing templating engines to use in the app. `{ ext: <string>, callback: <function> }`
 * **locals**: (*optional*) - (object) An object that will populate app.locals (http://expressjs.com/api.html#app.locals)  
 
