@@ -23,6 +23,7 @@ class Configuration {
         this.params = conf.params || {};
         this.aliases = conf.aliases || {};
         this.proxies = conf.proxies || [];
+        this.locals = conf.locals || {};
         this.enable = conf.enable || [];
         this.disable = conf.disable || [];
         this.engines = conf.engines || [];

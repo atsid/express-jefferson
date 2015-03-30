@@ -66,6 +66,7 @@ jefferson(app, conf);
 * **enable**: (*optional*) - An array of settings to enable (http://expressjs.com/api.html#app.enable)
 * **disable**: (*optional*) - An array of settings to disable (http://expressjs.com/api.html#app.disable)
 * **engines**: (*optional*) - An array of objects describing templating engines to use in the app. `{ ext: <string>, callback: <function> }`
+* **locals**: (*optional*) - (object) An object that will populate app.locals (http://expressjs.com/api.html#app.locals)  
 
 Boilerplate Config Sections (pre/post):
 * **all**: (*optional*) - An array of middleware to be applied to all endpoints.
