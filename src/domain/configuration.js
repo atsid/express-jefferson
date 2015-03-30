@@ -23,6 +23,8 @@ class Configuration {
         this.params = conf.params || {};
         this.aliases = conf.aliases || {};
         this.proxies = conf.proxies || [];
+        this.enable = conf.enable || [];
+        this.disable = conf.disable || [];
         this.pre = boilerplateSection(conf.pre);
         this.post = boilerplateSection(conf.post);
     }

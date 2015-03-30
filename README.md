@@ -63,6 +63,8 @@ jefferson(app, conf);
 * **params**: (*optional*) - A map of path-parameter name to resolver functions. 
 * **pre**: (*optional*) - (object) Boilerplate section of pre-middleware functions
 * **post**: (*optional*) - (object) Boilerplate section of post-middleware functions
+* **enable**: (*optional*) - An array of settings to enable (http://expressjs.com/api.html#app.enable)
+* **disable**: (*optional*) - An array of settings to disable (http://expressjs.com/api.html#app.disable)
 
 Boilerplate Config Sections (pre/post):
 * **all**: (*optional*) - An array of middleware to be applied to all endpoints.
