@@ -30,10 +30,8 @@ describe("Jefferson Proxies", () => {
         let conf = {
             proxies: [tripA, tripB],
             routes: {
-                "getItem": {
-                    method: "GET",
-                    path: "/test-path",
-                    middleware: [
+                "/test-path": {
+                    "get": [
                         (req, res, next) => {
                             initialMiddlewareTriggered = true;
                             next();
@@ -74,10 +72,8 @@ describe("Jefferson Proxies", () => {
         let conf = {
             proxies: [],
             routes: {
-                "getItem": {
-                    method: "GET",
-                    path: "/test-path",
-                    middleware: [
+                "/test-path": {
+                    "get": [
                         (req, res, next) => {
                             initialMiddlewareTriggered = true;
                             next();
@@ -123,10 +119,8 @@ describe("Jefferson Proxies", () => {
                 }
             ],
             routes: {
-                "getItem": {
-                    method: "GET",
-                    path: "/test-path",
-                    middleware: [
+                "/test-path": {
+                    "get": [
                         (req, res, next) => next(),
                         (req, res, next) => next(),
                         (req, res) => res.send("hello!")

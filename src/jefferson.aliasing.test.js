@@ -13,10 +13,8 @@ describe("Jefferson Alias Configuration", () => {
                 "derp": []
             },
             routes: {
-                "getUser": {
-                    method: "GET",
-                    path: "/test-item",
-                    middleware: [
+                "/test-item": {
+                    get: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
@@ -34,10 +32,8 @@ describe("Jefferson Alias Configuration", () => {
     it("throws if a alias section is undefined and an alias is referenced", () => {
         let conf = {
             routes: {
-                "getUser": {
-                    method: "GET",
-                    path: "/test-item",
-                    middleware: [
+                "/test-item": {
+                    get: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
@@ -60,14 +56,14 @@ describe("Jefferson Alias Configuration", () => {
                         req.entity.herp = "derp";
                         next();
                     },
-                    (req, res) => { res.json(req.entity); }
+                    (req, res) => {
+                        res.json(req.entity);
+                    }
                 ]
             },
             routes: {
-                "getUser": {
-                    method: "GET",
-                    path: "/test-item",
-                    middleware: [
+                "/test-item": {
+                    "get": [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
@@ -85,7 +81,9 @@ describe("Jefferson Alias Configuration", () => {
             .get("/test-item")
             .expect(200)
             .end((err, res) => {
-                if (err) { return done(err); }
+                if (err) {
+                    return done(err);
+                }
                 expect(res.body.id).to.equal(1);
                 expect(res.body.herp).to.equal("derp");
                 done();
@@ -101,14 +99,14 @@ describe("Jefferson Alias Configuration", () => {
                         req.entity.herp = "derp";
                         next();
                     },
-                    (req, res) => { res.json(req.entity); }
+                    (req, res) => {
+                        res.json(req.entity);
+                    }
                 ]
             },
             routes: {
-                "getUser": {
-                    method: "GET",
-                    path: "/test-item",
-                    middleware: [
+                "/test-item": {
+                    get: [
                         (req, res, next) => {
                             req.entity = {id: 1};
                             next();
@@ -126,7 +124,9 @@ describe("Jefferson Alias Configuration", () => {
             .get("/test-item")
             .expect(200)
             .end((err, res) => {
-                if (err) { return done(err); }
+                if (err) {
+                    return done(err);
+                }
                 expect(res.body.id).to.equal(1);
                 expect(res.body.herp).to.equal("derp");
                 done();

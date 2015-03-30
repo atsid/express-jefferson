@@ -14,16 +14,16 @@ let safeMethods = {
  * to it
  */
 module.exports = {
-    compose (route, conf) {
+    compose (method, middleware, conf) {
+        method = method.toLowerCase();
         let result = [];
-        let method = route.method.toLowerCase();
         let isSafe = () => safeMethods[method];
         let add = (x=[]) => result = result.concat(x);
 
         add(conf.pre.all);
         add(isSafe() ? conf.pre.safe : conf.pre.unsafe);
         add(conf.pre.method[method]);
-        add(route.middleware);
+        add(middleware);
         add(conf.post.method[method]);
         add(isSafe() ? conf.post.safe : conf.post.unsafe);
         add(conf.post.all);
