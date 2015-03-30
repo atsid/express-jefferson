@@ -2,7 +2,7 @@
 
 let chai = require("chai");
 let expect = chai.expect;
-let ToggleConfig = require("./settings-toggles");
+let ToggleConfig = require("./toggles");
 
 describe("The settings-toggle configuration section", () => {
     it("can enable app features", () => {
