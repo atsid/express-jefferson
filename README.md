@@ -74,7 +74,7 @@ routes: {
 ```
 * **pre**: (*optional*) - (object) Boilerplate section of pre-middleware functions (see below)
 * **post**: (*optional*) - (object) Boilerplate section of post-middleware functions (see below)
-* **proxies**: (*optional*) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
+* **proxies**: (*optional*) - An array of proxy objects invoked around all middleware functions in order. (see below)
 * **params**: (*optional*) - A map of path-parameter name to resolver functions.
 ```js
 params: {
@@ -130,6 +130,11 @@ pre: {
     }
 }
 ```
+
+Proxy Definition: 
+* **name**: - The name of the proxy.
+* **init**: - A function that accepts a middleware function, augments it, and returns the augmented proxy.
+* **conf**: (*optional*) - A configuration object that is passed to the proxy init function.
 
 # Proxies provided in Jefferson
 
