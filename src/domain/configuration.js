@@ -24,6 +24,7 @@ class Configuration {
         this.aliases = conf.aliases || {};
         this.proxies = conf.proxies || [];
         this.locals = conf.locals || {};
+        this.engines = conf.engines || [];
         this.pre = boilerplateSection(conf.pre);
         this.post = boilerplateSection(conf.post);
     }
