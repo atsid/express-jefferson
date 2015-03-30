@@ -116,7 +116,7 @@ settings: {
 }
 ```
 
-Boilerplate Config Sections (pre/post):
+###Boilerplate Config Sections (pre/post):
 * **all**: (*optional*) - An array of middleware to be applied to all endpoints.
 * **safe**: (*optional*) - An array of middleware to be applied to all safe endpoints (GET, HEAD, OPTIONS).
 * **unsafe**: (*optional*) - An array of middleware to be applied to all unsafe endpoints (not GET, HEAD, OPTIONS).
@@ -131,7 +131,7 @@ pre: {
 }
 ```
 
-Proxy Definition: 
+###Proxy Definition: 
 * **name**: - The name of the proxy.
 * **init**: - A function that accepts a middleware function, augments it, and returns the augmented proxy.
 * **conf**: (*optional*) - A configuration object that is passed to the proxy init function.
