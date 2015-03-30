@@ -47,16 +47,68 @@ jefferson(app, conf);
 ```
 
 ## Configuration
-* **routes** - (*required*) - A map of routes by name. Each object in the map describes an endpoint to be wired. These endpoints must contain an HTTP method, a path, and an array of middleware functions.
+* **routes** - (*required*) - A map of routes by route path. Each object in the map contains a map of method to middleware function array.
+```js
+routes: {
+    {
+        '/my-path': {
+            get: [getThings, send]
+            past: [makeThing, send]
+        },
+        '/my-path/:id': {
+            get: [getThing, send]
+        }
+    }
+}
+```
 * **aliases**: (*optional*) - A map of alias-name to handler chain. Routes may use these aliases in lieu of repeated function groups.
-* **pre**: (*optional*) - (object) Boilerplate section of pre-middleware functions
-* **post**: (*optional*) - (object) Boilerplate section of post-middleware functions
+```js
+aliases: {
+    'processAndTransmit': [deletePassword, addHateoasLinks, transmitEntity]
+},
+routes: {
+    '/users/:id': {
+        get: [getUser, 'processAndTransmit']
+    }
+}
+```
+* **pre**: (*optional*) - (object) Boilerplate section of pre-middleware functions (see below)
+* **post**: (*optional*) - (object) Boilerplate section of post-middleware functions (see below)
 * **proxies**: (*optional*) - An array of proxy objects invoked around all middleware functions in order. Each proxy object should have an init() function that accepts a delegate middleware function and returns a new middleware function.
 * **params**: (*optional*) - A map of path-parameter name to resolver functions.
+```js
+params: {
+    userId: (req, res, next) => {
+        req.user = userStore.findUser(req.params.userId);
+        next();
+    }
+}
+routes: {
+    '/users/:userId': {
+        get: [(req, res, next) => res.send(req.user)]
+    }
+}
+```
 * **enable**: (*optional*) - An array of settings to enable (http://expressjs.com/api.html#app.enable)
+```js
+enable: ['trust proxy', 'etag']
+```
 * **disable**: (*optional*) - An array of settings to disable (http://expressjs.com/api.html#app.disable)
+```js
+disable: ['trust proxy', 'etag']
+```
 * **engines**: (*optional*) - An array of objects describing templating engines to use in the app. `{ ext: <string>, callback: <function> }`
+```js
+engines: [{
+    ext: 'jade': callback: require('jade').__express
+}]
+```
 * **locals**: (*optional*) - (object) An object that will populate app.locals (http://expressjs.com/api.html#app.locals)
+```js
+locals: {
+    'a': true
+}
+```
 * **settings**: (*optional*) - (object) An object that will be iterated to populate application settings using app.set (http://expressjs.com/api.html#app.set) `{ <settingName>: <settingValue> }`
 
 Boilerplate Config Sections (pre/post):
@@ -64,6 +116,15 @@ Boilerplate Config Sections (pre/post):
 * **safe**: (*optional*) - An array of middleware to be applied to all safe endpoints (GET, HEAD, OPTIONS).
 * **unsafe**: (*optional*) - An array of middleware to be applied to all unsafe endpoints (not GET, HEAD, OPTIONS).
 * **method**: (*optional*, object) - On object of method-name to handler list.
+```js
+pre: {
+    all: [trackInvocation],
+    unsafe: [authenticate],
+    method: {
+        get: [markRequestReadOnly]
+    }
+}
+```
 
 # Proxies provided in Jefferson
 
