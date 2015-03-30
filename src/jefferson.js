@@ -6,6 +6,7 @@
 var Configuration = require("./domain/configuration");
 var debug = require("debug")("jefferson");
 let AppSectionClasses = [
+    require("./domain/appsection/engines"),
     require("./domain/appsection/resolvers"),
     require("./domain/appsection/routes")
 ];
