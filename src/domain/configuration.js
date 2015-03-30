@@ -25,6 +25,7 @@ class Configuration {
         this.proxies = conf.proxies || [];
         this.enable = conf.enable || [];
         this.disable = conf.disable || [];
+        this.engines = conf.engines || [];
         this.pre = boilerplateSection(conf.pre);
         this.post = boilerplateSection(conf.post);
     }
