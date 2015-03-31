@@ -16,29 +16,26 @@ var express = require('express'),
     jefferson = require('express-jefferson'),
     app = express(),    
     conf = {
-        proxies: [
-            {
-                name: 'Logger',
-                init (delegate) {
-                    return (req, res, next) => {
-                        console.log("invoking middleware function");
-                        delegate(req, res, next);
-                    }
-                }
-            }
-        ],
+        proxies: [logInvocations, resolvePromises],
+        pre: {
+            safe: [markReadOnly],
+            unsafe: [authenticate]
+        },
+        post: {
+            all: [addHaetoasLinks, transmitResponse]
+        },
         params: {
-            beerId: (req, res, next, id) => {
-                req.beer = getBeerById();
-                next();
-            }
+            beerId: getBeerById,
+            userId: getUserById
         },
         routes: {
             '/beers': {
-                get: [beerlist.get, send.json]
+                get: [getBeerList, send.json]
+                post: [createBeer, send.json]
             },
             '/beers/:beerId': 
-                get: [beer.get, send.json]
+                get: [send.json]
+                put: [editBeer, send.json]
             }
         }
     };
@@ -135,6 +132,17 @@ pre: {
 * **name**: - The name of the proxy.
 * **init**: - A function that accepts a middleware function, augments it, and returns the augmented proxy.
 * **conf**: (*optional*) - A configuration object that is passed to the proxy init function.
+```js
+{
+    name: 'Logger',
+    init (delegate) {
+        return (req, res, next) => {
+            console.log("invoking middleware function");
+            delegate(req, res, next);
+        }
+    }
+}
+```
 
 # Proxies provided in Jefferson
 
