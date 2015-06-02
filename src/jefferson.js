@@ -5,6 +5,7 @@
  */
 var Configuration = require("./domain/configuration");
 var debug = require("debug")("jefferson");
+var express = require("express");
 let AppSectionClasses = [
     require("./domain/appsection/locals"),
     require("./domain/appsection/toggles"),
@@ -14,7 +15,12 @@ let AppSectionClasses = [
     require("./domain/appsection/routes")
 ];
 
-module.exports = (app, conf) => {
+/**
+ * Main jefferson entry point.
+ * @param app
+ * @param conf
+ */
+let jefferson = (app, conf) => {
     if (!app) {
         throw new Error("app parameter must be supplied");
     }
@@ -27,3 +33,28 @@ module.exports = (app, conf) => {
         new Type(app, conf).configure();
     });
 };
+
+/**
+ * Static helper function that creates a new express app from scratch, then binds the config.
+ * @param conf
+ */
+jefferson.app = function (conf) {
+    debug("Creating new jefferson app with config");
+    var app = express();
+    this(app, conf);
+    return app;
+};
+
+/**
+ * Static helper function that creates a new express Router, then binds the config.
+ * @param conf
+ */
+jefferson.router = function (conf) {
+    debug("Creating new jefferson Router with config");
+    /*eslint-disable new-cap*/
+    var router = express.Router();
+    this(router, conf);
+    return router;
+};
+
+module.exports = jefferson;
