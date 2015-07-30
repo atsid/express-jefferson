@@ -2,6 +2,7 @@
 [![Test Coverage](https://codeclimate.com/github/atsid/express-jefferson/badges/coverage.svg)](https://codeclimate.com/github/atsid/express-jefferson)
 [![Code Climate](https://codeclimate.com/github/atsid/express-jefferson/badges/gpa.svg)](https://codeclimate.com/github/atsid/express-jefferson)
 [![Dependency Status](https://david-dm.org/atsid/express-jefferson.svg)](https://david-dm.org/atsid/express-jefferson)
+[![devDependency Status](https://david-dm.org/atsid/express-jefferson/dev-status.svg)](https://david-dm.org/atsid/express-jefferson#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/express-jefferson.png)](https://nodei.co/npm/express-jefferson/)
 
