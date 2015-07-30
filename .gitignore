@@ -33,6 +33,4 @@ node_modules
 # Build Library
 lib/
 
-/jefferson.js
-/proxies/
-/domain/
+dist/

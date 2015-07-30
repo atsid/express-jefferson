@@ -1,7 +1,6 @@
-"use strict";
-var chainProcessor = require("./chain_processor"),
-    middlewareComposer = require("./middleware_composer");
-var debug = require("debug")("jefferson");
+const chainProcessor = require('./chain_processor');
+const middlewareComposer = require('./middleware_composer');
+const debug = require('debug')('jefferson');
 
 /**
  * Configures routes within the express app.
@@ -13,17 +12,17 @@ class Routes {
     }
 
     configure() {
-        let routeNames = Object.keys(this.conf.routes);
+        const routeNames = Object.keys(this.conf.routes);
         debug(`detected ${routeNames.length} routing paths`);
         routeNames.forEach((routeName) => {
-            let route = this.conf.routes[routeName];
+            const route = this.conf.routes[routeName];
             this.wireRoute(routeName, route);
         });
     }
 
     getMiddlewareChain(method, middleware) {
-        middleware = middlewareComposer.compose(method, middleware, this.conf);
-        return chainProcessor.process(middleware, this.conf);
+        const composed = middlewareComposer.compose(method, middleware, this.conf);
+        return chainProcessor.process(composed, this.conf);
     }
 
     /**
@@ -33,12 +32,12 @@ class Routes {
      */
     wireRoute(routePath, routeMethods) {
         if (routeMethods.method || routeMethods.path) {
-            throw new Error("older-style routes detected. please check the documentation for the new routing style.");
+            throw new Error('older-style routes detected. please check the documentation for the new routing style.');
         }
         let router = this.app.route(routePath);
         Object.keys(routeMethods).forEach((method) => {
-            let middleware = this.getMiddlewareChain(method, routeMethods[method]);
-            debug(`"${method.toUpperCase()} ${routePath} - ${middleware.length} middlewares`);
+            const middleware = this.getMiddlewareChain(method, routeMethods[method]);
+            debug(`'${method.toUpperCase()} ${routePath} - ${middleware.length} middlewares`);
             router = router[method](middleware);
         });
     }

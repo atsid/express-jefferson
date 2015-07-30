@@ -1,5 +1,4 @@
-"use strict";
-let debug = require("debug")("jefferson:settings");
+const debug = require('debug')('jefferson:settings');
 
 /**
  * Configures application settings
@@ -12,9 +11,9 @@ class Settings {
     }
 
     configure() {
-        let settingsKeys = Object.keys(this.conf.settings);
+        const settingsKeys = Object.keys(this.conf.settings);
         settingsKeys.forEach((key) => {
-            let value = this.conf.settings[key];
+            const value = this.conf.settings[key];
             debug(`configuring setting ${key} => ${typeof value}`);
             this.app.set(key, value);
         });

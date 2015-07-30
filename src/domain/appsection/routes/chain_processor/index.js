@@ -1,7 +1,6 @@
-"use strict";
-let configSections = [
-    require("./resolve_aliases"),
-    require("./proxy_wrap")
+const configSections = [
+    require('./resolve_aliases'),
+    require('./proxy_wrap'),
 ];
 
 /**
@@ -10,10 +9,11 @@ let configSections = [
  * @returns {*} An array of middleware functions
  */
 module.exports = {
-    process (middleware, conf) {
+    process(middleware, conf) {
+        let composed = middleware;
         configSections.forEach((section) => {
-            middleware = section.process(middleware, conf);
+            composed = section.process(composed, conf);
         });
-        return middleware;
-    }
+        return composed;
+    },
 };

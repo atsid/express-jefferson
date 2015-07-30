@@ -1,5 +1,4 @@
-"use strict";
-var JPromise = Promise || require("bluebird");
+const JPromise = Promise || require('bluebird');
 
 /**
  * A Jefferson proxy that resolves promise-based middleware functions.
@@ -11,21 +10,21 @@ var JPromise = Promise || require("bluebird");
  * @type {{name: string, init: Function}}
  */
 module.exports = {
-    name: "Promise Handler",
+    name: 'Promise Handler',
     init: (delegate, conf, middlewareIndex) => {
-        if (!delegate || typeof delegate !== "function") {
-            throw new Error("'delegate' argument must exist and be a function. MiddlewareIndex: " + middlewareIndex);
+        if (!delegate || typeof delegate !== 'function') {
+            throw new Error('\'delegate\' argument must exist and be a function. MiddlewareIndex: ' + middlewareIndex);
         }
         return (req, res, next) => {
             let nextTriggered = false;
-            let invokeNext = (arg) => {
+            function invokeNext(arg) {
                 if (!nextTriggered) {
                     nextTriggered = true;
                     next(arg);
                 }
-            };
-            let isFlowHalted = () => conf && conf.haltCondition && conf.haltCondition(req, res);
-            let possiblePromise = delegate(req, res, invokeNext);
+            }
+            const isFlowHalted = () => conf && conf.haltCondition && conf.haltCondition(req, res);
+            const possiblePromise = delegate(req, res, invokeNext);
             return JPromise.resolve(possiblePromise)
                 .then(() => {
                     if (!isFlowHalted()) {
@@ -43,16 +42,16 @@ module.exports = {
     promisify: (delegate) => {
         return (req, res, next) => {
             return new JPromise((resolve, reject) => {
-                let proxyNext = (err) => {
+                function proxyNext(err) {
                     next(err);
                     if (err) {
                         reject(err);
                     } else {
                         resolve();
                     }
-                };
+                }
                 delegate(req, res, proxyNext);
             });
         };
-    }
+    },
 };

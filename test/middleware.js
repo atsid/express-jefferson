@@ -1,13 +1,12 @@
-"use strict";
 module.exports = {
-    append (value) {
+    append(value) {
         return (req, res, next) => {
-            req.result = (req.result || "") + value;
+            req.result = (req.result || '') + value;
             next();
         };
     },
 
-    sendResult (req, res) {
+    sendResult(req, res) {
         res.send(req.result);
-    }
+    },
 };

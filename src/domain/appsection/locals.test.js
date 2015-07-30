@@ -1,20 +1,17 @@
-"use strict";
+const {expect} = require('chai');
+const LocalsConfig = require('./locals');
 
-let chai = require("chai");
-let expect = chai.expect;
-let LocalsConfig = require("./locals");
-
-describe("The 'locals' configuration section", () => {
-    it("can configure locals for an app", () => {
-        let app = {
+describe('The \'locals\' configuration section', () => {
+    it('can configure locals for an app', () => {
+        const app = {
             locals: {
-                herp: true
-            }
+                herp: true,
+            },
         };
-        let conf = {
+        const conf = {
             locals: {
-                derp: true
-            }
+                derp: true,
+            },
         };
 
         new LocalsConfig(app, conf).configure();
