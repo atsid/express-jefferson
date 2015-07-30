@@ -4,7 +4,8 @@
   "description": "Declarative Application Routing",
   "main": "jefferson.js",
   "scripts": {
-    "test": "gulp ci-build && CODECLIMATE_REPO_TOKEN=b98ec66c2803bd0b0a73ca39e88baf461384d054c38a77de1376aeb107a09afe codeclimate < coverage/lcov.info"
+    "test": "gulp ci-build",
+    "report-coverage": "codeclimate-test-reporter < coverage/lcov.info",
   },
   "repository": {
     "type": "git",
