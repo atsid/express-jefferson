@@ -1,5 +1,4 @@
-"use strict";
-let debug = require("debug")("jefferson:engines");
+const debug = require('debug')('jefferson:engines');
 
 /**
  * Configures templating engines for an app

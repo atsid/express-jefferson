@@ -1,5 +1,4 @@
-"use strict";
-var debug = require("debug")("jefferson");
+const debug = require('debug')('jefferson');
 
 /**
  * Configures parameter resolvers for the application
@@ -11,12 +10,12 @@ class Resolvers {
     }
 
     configure() {
-        let resolvers = Object.keys(this.conf.params);
+        const resolvers = Object.keys(this.conf.params);
         resolvers.forEach(this.wireResolver, this);
     }
 
     wireResolver(name) {
-        debug(`defining parameter resolver for "${name}"`);
+        debug(`defining parameter resolver for '${name}'`);
         this.app.param(name, this.conf.params[name]);
     }
 }

@@ -1,8 +1,9 @@
-"use strict";
-
-let initializeProxy = (proxy, delegate, index) => {
+/**
+ * Initializes a single proxy
+ */
+function initializeProxy(proxy, delegate, index) {
     return proxy.init(delegate, proxy.conf, index);
-};
+}
 
 /**
  * Wraps a single middleware function in the configured proxy chain
@@ -10,8 +11,8 @@ let initializeProxy = (proxy, delegate, index) => {
  * @param conf The application configuration
  * @returns {*}
  */
-let proxyWrap = (delegate, index, conf) => {
-    let proxies = conf.proxies;
+function proxyWrap(delegate, index, conf) {
+    const proxies = conf.proxies;
     if (!proxies.length) { return delegate; }
 
     let lastProxy = initializeProxy(proxies[proxies.length - 1], delegate, index);
@@ -19,10 +20,10 @@ let proxyWrap = (delegate, index, conf) => {
         lastProxy = initializeProxy(proxies[i], lastProxy, index);
     }
     return lastProxy;
-};
+}
 
 module.exports = {
-    process (middleware, conf) {
+    process(middleware, conf) {
         return middleware.map((fn, index) => proxyWrap(fn, index, conf));
-    }
+    },
 };

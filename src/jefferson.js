@@ -1,18 +1,16 @@
-"use strict";
-
 /**
  * Declaratively initializes routes in an express app
  */
-var Configuration = require("./domain/configuration");
-var debug = require("debug")("jefferson");
-var express = require("express");
-let AppSectionClasses = [
-    require("./domain/appsection/locals"),
-    require("./domain/appsection/toggles"),
-    require("./domain/appsection/settings"),
-    require("./domain/appsection/engines"),
-    require("./domain/appsection/resolvers"),
-    require("./domain/appsection/routes")
+const Configuration = require('./domain/configuration');
+const debug = require('debug')('jefferson');
+const express = require('express');
+const AppSectionClasses = [
+    require('./domain/appsection/locals'),
+    require('./domain/appsection/toggles'),
+    require('./domain/appsection/settings'),
+    require('./domain/appsection/engines'),
+    require('./domain/appsection/resolvers'),
+    require('./domain/appsection/routes'),
 ];
 
 /**
@@ -20,41 +18,41 @@ let AppSectionClasses = [
  * @param app
  * @param conf
  */
-let jefferson = (app, conf) => {
+function jefferson(app, conf) {
     if (!app) {
-        throw new Error("app parameter must be supplied");
+        throw new Error('app parameter must be supplied');
     }
     if (!conf) {
-        throw new Error("application configuration must be supplied");
+        throw new Error('application configuration must be supplied');
     }
-    conf = new Configuration(conf);
+    const configuration = new Configuration(conf);
     AppSectionClasses.map((Type) => {
         debug(`configuring ${Type.name}`);
-        new Type(app, conf).configure();
+        new Type(app, configuration).configure();
     });
-};
+}
 
 /**
  * Static helper function that creates a new express app from scratch, then binds the config.
  * @param conf
  */
-jefferson.app = function (conf) {
-    debug("Creating new jefferson app with config");
-    var app = express();
-    this(app, conf);
-    return app;
+jefferson.app = function app(conf) {
+    debug('Creating new jefferson app with config');
+    const a = express();
+    this(a, conf);
+    return a;
 };
 
 /**
  * Static helper function that creates a new express Router, then binds the config.
  * @param conf
  */
-jefferson.router = function (conf) {
-    debug("Creating new jefferson Router with config");
+jefferson.router = function router(conf) {
+    debug('Creating new jefferson Router with config');
     /*eslint-disable new-cap*/
-    var router = express.Router();
-    this(router, conf);
-    return router;
+    const r = express.Router();
+    this(r, conf);
+    return r;
 };
 
 module.exports = jefferson;

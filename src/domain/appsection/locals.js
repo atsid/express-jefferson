@@ -1,5 +1,4 @@
-"use strict";
-let debug = require("debug")("jefferson:locals");
+const debug = require('debug')('jefferson:locals');
 
 /**
  * Configures application locals, which are available to Templating engines:
@@ -12,9 +11,9 @@ class Locals {
     }
 
     configure() {
-        let locals = this.conf.locals;
+        const locals = this.conf.locals;
         Object.keys(locals).forEach((key) => {
-            let value = locals[key];
+            const value = locals[key];
             debug(`defining local ${key} => ${typeof value}`);
             this.app.locals[key] = value;
         });

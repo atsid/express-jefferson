@@ -1,5 +1,4 @@
-"use strict";
-let debug = require("debug")("jefferson:settings-toggles");
+const debug = require('debug')('jefferson:settings-toggles');
 
 /**
  * Enables/Disables Features in the app settings
@@ -7,16 +6,16 @@ let debug = require("debug")("jefferson:settings-toggles");
  * http://expressjs.com/api.html#app.disable
  */
 class Toggles {
-    constructor (app, conf) {
+    constructor(app, conf) {
         this.app = app;
         this.conf = conf;
     }
 
     configure() {
         debug(`enabling ${this.conf.enable}`);
-        this.conf.enable.forEach((feature) => this.app.enable(feature));
+        this.conf.enable.forEach((c) => this.app.enable(c));
         debug(`disabling ${this.conf.disable}`);
-        this.conf.disable.forEach((feature) => this.app.disable(feature));
+        this.conf.disable.forEach((c) => this.app.disable(c));
     }
 }
 

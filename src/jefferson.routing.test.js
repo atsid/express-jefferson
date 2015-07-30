@@ -1,37 +1,34 @@
-"use strict";
-var chai = require("chai"),
-    express = require("express"),
-    jefferson = require("./jefferson");
-let expect = chai.expect;
+const {expect} = require('chai');
+const express = require('express');
+const jefferson = require('./jefferson');
 
-describe("Jefferson", () => {
-
-    it("throws an error if an express app is not provided", () => {
+describe('Jefferson', () => {
+    it('throws an error if an express app is not provided', () => {
         expect(() => jefferson(null, {})).to.throw();
     });
 
-    it("throws an error if an application config is not provided", () => {
+    it('throws an error if an application config is not provided', () => {
         expect(() => jefferson(express())).to.throw();
     });
 
-    it("configures an application", () => {
-        let conf = {
-                routes: {
-                    "/test-path": {
-                        get: [() => {}]
-                    },
-                    "/test-path/:id": {
-                        get: [() => {}],
-                        post: [() => {}],
-                        put: [() => {}]
-                    }
-                }
+    it('configures an application', () => {
+        const conf = {
+            routes: {
+                '/test-path': {
+                    get: [() => {}],
+                },
+                '/test-path/:id': {
+                    get: [() => {}],
+                    post: [() => {}],
+                    put: [() => {}],
+                },
             },
-            app = express();
+        };
+        const app = express();
 
         jefferson(app, conf);
         /*eslint-disable*/
-        let appRoutes = app._router.stack.filter((it) => it.route);
+        const appRoutes = app._router.stack.filter((it) => it.route);
         /*eslint-enable*/
         expect(appRoutes.length).to.equal(2);
         expect(appRoutes[0].route.methods.get).to.be.true;
@@ -40,23 +37,22 @@ describe("Jefferson", () => {
         expect(appRoutes[1].route.methods.put).to.be.true;
     });
 
-    it("will throw with an older configuration", () => {
-        let conf = {
-                routes: {
-                    "getCollection": {
-                        method: "GET",
-                        path: "/test-path",
-                        middleware: [ () => {} ]
-                    },
-                    "getItem": {
-                        method: "GET",
-                        path: "/test-path/:id",
-                        middleware: [ () => {} ]
-                    }
-                }
+    it('will throw with an older configuration', () => {
+        const conf = {
+            routes: {
+                'getCollection': {
+                    method: 'GET',
+                    path: '/test-path',
+                    middleware: [ () => {} ],
+                },
+                'getItem': {
+                    method: 'GET',
+                    path: '/test-path/:id',
+                    middleware: [ () => {} ],
+                },
             },
-            app = express();
-
+        };
+        const app = express();
         expect(() => jefferson(app, conf)).to.throw();
     });
 });

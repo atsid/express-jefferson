@@ -1,18 +1,16 @@
-"use strict";
-
-let boilerplateSection = (section) => {
-    let result = section || {};
-    let initSubsection = (name, defaultValue = []) => {
+function boilerplateSection(section) {
+    const result = section || {};
+    function initSubsection(name, defaultValue = []) {
         if (!result[name]) {
             result[name] = defaultValue;
         }
-    };
-    initSubsection("all");
-    initSubsection("safe");
-    initSubsection("unsafe");
-    initSubsection("method", {});
+    }
+    initSubsection('all');
+    initSubsection('safe');
+    initSubsection('unsafe');
+    initSubsection('method', {});
     return result;
-};
+}
 
 /**
  * The configuration class provides sane defaults for incoming configuration values.

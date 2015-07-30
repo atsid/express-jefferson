@@ -1,36 +1,33 @@
-"use strict";
+const {expect} = require('chai');
+const ToggleConfig = require('./toggles');
 
-let chai = require("chai");
-let expect = chai.expect;
-let ToggleConfig = require("./toggles");
-
-describe("The settings-toggle configuration section", () => {
-    it("can enable app features", () => {
-        let enabled = {};
-        let app = {
-            enable (feature) {
+describe('The settings-toggle configuration section', () => {
+    it('can enable app features', () => {
+        const enabled = {};
+        const app = {
+            enable(feature) {
                 enabled[feature] = true;
-            }
+            },
         };
-        let conf = {
-            enable: ["derp"],
-            disable: []
+        const conf = {
+            enable: ['derp'],
+            disable: [],
         };
 
         new ToggleConfig(app, conf).configure();
         expect(enabled.derp).to.be.true;
     });
 
-    it("can disable app features", () => {
-        let disabled = {};
-        let app = {
-            disable (feature) {
+    it('can disable app features', () => {
+        const disabled = {};
+        const app = {
+            disable(feature) {
                 disabled[feature] = true;
-            }
+            },
         };
-        let conf = {
-            disable: ["derp"],
-            enable: []
+        const conf = {
+            disable: ['derp'],
+            enable: [],
         };
 
         new ToggleConfig(app, conf).configure();
