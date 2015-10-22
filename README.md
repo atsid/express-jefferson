@@ -51,7 +51,7 @@ routes: {
     {
         '/my-path': {
             get: [getThings, send]
-            past: [makeThing, send]
+            post: [makeThing, send]
         },
         '/my-path/:id': {
             get: [getThing, send]
